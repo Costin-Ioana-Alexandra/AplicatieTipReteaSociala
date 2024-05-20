@@ -1,0 +1,48 @@
+<div class="container">
+  <div class="settings-container">
+    <h2>Settings</h2>
+    <form>
+      <div class="form-group" id="username">
+        <label for="username" onclick="toggleSection('username')">Change your username <i class="fas fa-chevron-down"></i></label>
+        <div class="hidden">
+          <input type="text" id="newUsername" placeholder="New username">
+          <input type="password" id="confirmPasswordUsername" placeholder="Confirm password">
+        </div>
+      </div>
+
+      <div class="form-group" id="email">
+        <label for="email" onclick="toggleSection('email')">Change your email <i class="fas fa-chevron-down"></i></label>
+        <div class="hidden">
+          <input type="text" id="newEmail" placeholder="New email">
+          <input type="password" id="confirmPasswordEmail" placeholder="Confirm password">
+        </div>
+      </div>
+
+      <div class="form-group" id="password">
+        <label for="password" onclick="toggleSection('password')">Change your password <i class="fas fa-chevron-down"></i></label>
+        <div class="hidden">
+          <input type="password" id="oldPassword" placeholder="Old password">
+          <input type="password" id="newPassword" placeholder="New password">
+          <input type="password" id="confirmNewPassword" placeholder="Confirm new password">
+        </div>
+      </div>
+    
+      <button type="submit" routerLink="/messages">Save Changes</button>
+    </form>
+  </div>
+</div>
+
+<script>
+  function toggleSection(sectionId) {
+    const section = document.getElementById(sectionId);
+    const hiddenDiv = section.querySelector('.hidden');
+    const arrowIcon = section.querySelector('i');
+
+    hiddenDiv.classList.toggle('show');
+    if (hiddenDiv.classList.contains('show')) {
+      arrowIcon.classList.replace('fa-chevron-down', 'fa-chevron-up');
+    } else {
+      arrowIcon.classList.replace('fa-chevron-up', 'fa-chevron-down');
+    }
+  }
+</script>

@@ -1,0 +1,98 @@
+.container {
+  /*background-color: #C2D9FF;*/
+  height: 100%;
+  background-image: url("/assets/background_login.png");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  min-height: 100vh;  
+  width: 100%; 
+}
+
+.login-container {
+  display: flex;
+  justify-content: center; 
+  align-items: center; 
+  height: auto; 
+}
+
+.login-container form {
+  width: 300px; 
+  padding: 50px;
+  border: 1px solid #190482;
+  border-radius: 25px;
+  background-color: #8E8FFA;
+  margin-left: 40px;
+}
+
+.login-container form label {
+  margin-bottom: 10px;
+  display: block; 
+}
+
+.login-container form input {
+  width: 91%; 
+  padding: 10px;
+  margin-bottom: 15px;
+}
+
+.login-container form button {
+  width: 100%;
+  padding: 10px;
+  background-color: #190482;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.login-container form button:hover {
+  background-color: #0056b3;
+}
+
+.signup-link {
+  margin-top: 20px;
+  margin-left: 150px;
+}
+
+.signup-link p {
+  margin: 0;
+}
+
+.signup-link a {
+  color: blue;  
+}
+
+.logo-container img {
+  max-width: 100%;
+  max-height: 300px;
+  margin-right: 140px;
+}
+
+.motto {
+  font-family: "Lucida Handwriting", Roboto, "Helvetica Neue", Arial, sans-serif; 
+  font-size: 30px;
+  font-weight: bold; 
+  color: #000000; 
+  text-align: center; 
+  margin-top: 150px;
+  margin-bottom: 20px; 
+}
+
+.reset-link {
+  margin-top: 20px;
+  margin-left: 100px;
+}
+
+.reset-link p {
+  margin: 0;
+}
+
+.reset-link a {
+  color: blue;
+}

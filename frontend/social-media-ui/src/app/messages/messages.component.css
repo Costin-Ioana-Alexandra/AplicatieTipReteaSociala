@@ -1,0 +1,105 @@
+.chat-container {
+  height: 100%;
+  background-image: url("/assets/background.png");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end; 
+  align-items: center;
+  height: 100vh;
+  width: 100%;
+}
+
+/*.current-user-messages, .other-user-messages {
+  overflow-y: auto;
+  max-height: 70vh; 
+  margin-bottom: 10px;
+  margin-top: 100px
+}*/
+
+.messages-container {
+  overflow-y: auto;
+  max-height: 70vh;
+  margin-bottom: 5px;
+  margin-top: 90px;
+}
+
+.message {
+  background-color: #8E8FFA;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  max-width: 30%;
+  margin-left: 600px;
+  word-wrap: break-word;
+  text-align: right;
+}
+
+.input-container {
+  margin-top: 50px;
+  width: 50%; 
+  display: flex; 
+  margin-bottom: 100px;
+}
+
+.input-container input {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px 0 0 5px;
+}
+
+.input-container button {
+  width: 70px;
+  padding: 10px;
+  background-image: url("/assets/racheta.png");
+  background-size: cover;
+  color: #fff;
+  border: none;
+  border-radius: 0 5px 5px 0;
+  cursor: pointer;
+}
+
+.input-container button:hover {
+  background-color: #0056b3;
+}
+
+.welcome-message {
+  font-size: 24px; 
+  font-family: "Lucida Handwriting", Roboto, "Helvetica Neue", Arial, sans-serif; 
+  font-weight: bold; 
+  color: #333; 
+  text-align: center; 
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.settings-button {
+  position: absolute;
+  top: 10px;
+  right: 120px;
+  padding: 10px;
+  background-color: #190482;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.disconnect-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  padding: 10px;
+  background-color: #190482;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.settings-button button, .disconnect-button button {
+  border-color: #190482;
+}

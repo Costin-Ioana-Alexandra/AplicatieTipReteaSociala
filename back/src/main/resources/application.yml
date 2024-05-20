@@ -1,0 +1,34 @@
+server:
+  port: 8080
+  error:
+    include-message: always
+    include-binding-errors: always
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/registration
+    username: c2ViYXN0aWFu
+    password: MTcxOTU5
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+    show-sql: true
+
+mail:
+  host: sandbox.smtp.mailtrap.io
+  port: 2525
+  username: 851798ac859e68
+  password: 8dca44c26b0fda
+  protocol: smtp
+  properties:
+    mail:
+      smtp:
+        auth: true
+        starttls:
+          enable: true
+        ssl:
+          trust: "*"
