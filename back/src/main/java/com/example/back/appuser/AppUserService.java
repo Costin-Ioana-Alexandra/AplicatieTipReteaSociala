@@ -13,6 +13,9 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
 
+/**
+ * Represents a service class for managing users.
+ */
 @Service
 @AllArgsConstructor
 public class AppUserService implements UserDetailsService {
@@ -22,16 +25,35 @@ public class AppUserService implements UserDetailsService {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final ConfirmationTokenService confirmationTokenService;
 
+    /**
+     * Loads a user by their email.
+     *
+     * @param email the email of the user to load
+     * @return the user details
+     * @throws UsernameNotFoundException if the user is not found
+     */
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         return appUserRepository.findByEmail(email).orElseThrow(() ->
                 new UsernameNotFoundException(String.format(USER_NOT_FOUND, email)));
     }
 
+    /**
+     * Finds a user by their email.
+     *
+     * @param email the email of the user
+     * @return an Optional containing the user if found, or empty if not found
+     */
     public Optional<AppUser> findByEmail(String email) {
         return appUserRepository.findByEmail(email);
     }
 
+    /**
+     * Signs up a new user.
+     *
+     * @param appUser the user to sign up
+     * @return a confirmation token for email verification
+     */
     public String signUpUser(AppUser appUser) {
         String email = appUser.getEmail();
         boolean userExist = appUserRepository.findByEmail(email).isPresent();
@@ -58,6 +80,12 @@ public class AppUserService implements UserDetailsService {
         return token;
     }
 
+    /**
+     * Enables a user's account.
+     *
+     * @param email the email of the user to enable
+     * @return the number of affected rows
+     */
     public int enableAppUser(String email) {
         return appUserRepository.enableAppUser(email);
     }
