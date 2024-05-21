@@ -10,6 +10,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -25,6 +26,10 @@ public class AppUserService implements UserDetailsService {
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         return appUserRepository.findByEmail(email).orElseThrow(() ->
                 new UsernameNotFoundException(String.format(USER_NOT_FOUND, email)));
+    }
+
+    public Optional<AppUser> findByEmail(String email) {
+        return appUserRepository.findByEmail(email);
     }
 
     public String signUpUser(AppUser appUser) {
