@@ -12,15 +12,39 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 
+/**
+ * Service for handling user registration and email confirmation.
+ */
 @Service
 @AllArgsConstructor
 public class RegistrationService {
 
+    /**
+     * Service for managing application users.
+     */
     private final AppUserService appUserService;
+    
+    /**
+     * Validator for checking the validity of email addresses.
+     */
     private final EmailValidator emailValidator;
+    
+    /**
+     * Service for managing confirmation tokens.
+     */
     private final ConfirmationTokenService confirmationTokenService;
+    
+    /**
+     * Service for sending emails.
+     */
     private final EmailSender emailSender;
 
+    /**
+     * Registers a new user and sends a confirmation email.
+     *
+     * @param request the registration request containing user details
+     * @return the confirmation token
+     */
     public String register(RegistrationRequest request) {
         boolean isValidEmail = emailValidator.
                 test(request.getEmail());
@@ -39,16 +63,25 @@ public class RegistrationService {
                 )
         );
 
-        // prepare the activation link
+        /**
+         * Prepares the activation link.
+         */
         String link = "http://localhost:8080/api/v1/registration/confirm?token=" + token;
-        // send the link with application link
+
+        /**
+         * Sends the link with the application link.
+         */
         emailSender.send(request.getEmail(), buildEmail(request.getFirstName(), link));
 
         return token;
     }
 
-
-
+    /**
+     * Confirms the user's account using the provided token.
+     *
+     * @param token the confirmation token
+     * @return a success message
+     */
     @Transactional
     public String confirmToken(String token) {
         ConfirmationToken confirmationToken = confirmationTokenService
@@ -137,6 +170,13 @@ public class RegistrationService {
                 "</div></div>";
     }
 
+    /**
+     * Builds the email content for the confirmation email.
+     *
+     * @param name the name of the user
+     * @param link the confirmation link
+     * @return the email content as a string
+     */
     private String buildEmail(String name, String link) {
         return "<div style=\"font-family:Helvetica,Arial,sans-serif;font-size:16px;margin:0;color:#0b0c0c\">\n" +
                 "\n" +

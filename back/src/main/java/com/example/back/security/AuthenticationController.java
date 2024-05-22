@@ -13,15 +13,36 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * Represents the class controller for handling authentication-related endpoints.
+ */
 @RestController
 @RequestMapping("/api/v1")
 @RequiredArgsConstructor
 public class AuthenticationController {
 
+	/**
+	 * The authentication manager for authentication operations.
+	 */
     private final AuthenticationManager authenticationManager;
+    
+    /**
+     * The utility class for generating JWT tokens.
+     */
     private final JwtUtil jwtUtil;
+    
+    /**
+     * The service for handling user registration.
+     */
     private final RegistrationService registrationService;
 
+    /**
+     * Endpoint for user authentication.
+     *
+     * @param authenticationRequest Request body containing user credentials
+     * @return ResponseEntity containing JWT token if authentication is successful,
+     *         otherwise returns ResponseEntity with UNAUTHORIZED status
+     */
     @PostMapping("/login")
     public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest) {
         try {
@@ -38,6 +59,12 @@ public class AuthenticationController {
         }
     }
 
+    /**
+     * Endpoint for user registration.
+     *
+     * @param registrationRequest Request body containing user registration details
+     * @return ResponseEntity containing the registration token
+     */
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody RegistrationRequest registrationRequest) {
         String token = registrationService.register(registrationRequest);

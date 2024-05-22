@@ -9,11 +9,27 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
+/**
+ * Represents the repository interface for managing confirmation tokens.
+ */
 @Repository
 public interface ConfirmationTokenRepository extends JpaRepository<ConfirmationToken, Long> {
 
+    /**
+     * Retrieves a confirmation token by its token string.
+     *
+     * @param token The token string.
+     * @return An optional containing the confirmation token if found, otherwise empty.
+     */
     Optional<ConfirmationToken> findByToken(String token);
 
+    /**
+     * Updates the confirmation time of a confirmation token.
+     *
+     * @param token        The token string.
+     * @param confirmedAt  The date and time when the token was confirmed.
+     * @return The number of tokens updated.
+     */
     @Transactional
     @Modifying
     @Query("UPDATE ConfirmationToken c " +

@@ -8,17 +8,27 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 
+/**
+ * Represents a confirmation token used for account verification.
+ */
 @Getter
 @Setter
 @NoArgsConstructor
 @Entity
 public class ConfirmationToken {
 
+	/**
+	 * Generates sequence numbers for the confirmation tokens.
+	 */
     @SequenceGenerator(
             name = "confirmation_token_sequence",
             sequenceName = "confirmation_token_sequence",
             allocationSize = 1
     )
+    
+    /**
+     * The identifier for the confirmation token.
+     */
     @Id
     @GeneratedValue(
             strategy = GenerationType.SEQUENCE,
@@ -26,17 +36,32 @@ public class ConfirmationToken {
     )
     private Long id;
 
+    /**
+     * The token string.
+     */
     @Column(nullable = false)
     private String token;
 
+    /**
+     * The date and time when the token was created.
+     */
     @Column(nullable = false)
     private LocalDateTime createdAt;
 
+    /**
+     * The date and time when the token expires.
+     */
     @Column(nullable = false)
     private LocalDateTime expiresAt;
 
+    /**
+     * The date and time when the token was confirmed.
+     */
     private LocalDateTime confirmedAt;
 
+    /**
+     * The user associated with the token.
+     */
     @ManyToOne
     @JoinColumn(
             nullable = false,
@@ -44,6 +69,14 @@ public class ConfirmationToken {
     )
     private AppUser appUser;
 
+    /**
+     * Constructs a confirmation token with the specified parameters.
+     *
+     * @param token      The token string.
+     * @param createdAt  The date and time when the token was created.
+     * @param expiresAt  The date and time when the token expires.
+     * @param appUser    The user associated with the token.
+     */
     public ConfirmationToken(String token,
                              LocalDateTime createdAt,
                              LocalDateTime expiresAt,
