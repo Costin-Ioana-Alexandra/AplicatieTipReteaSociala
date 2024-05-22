@@ -16,15 +16,36 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+/**
+ * The class configuration for setting up Spring Security.
+ */
 @Configuration
 @RequiredArgsConstructor
 @EnableWebSecurity
 public class WebSecurityConfig {
 
+	/**
+	 * The service for managing application users.
+	 */
     private final AppUserService appUserService;
+    
+    /**
+     * The password encoder for encoding and decoding passwords.
+     */
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    
+    /**
+     * The filter for handling JWT authentication requests.
+     */
     private final JwtRequestFilter jwtRequestFilter;
 
+    /**
+     * Configures security filter chain.
+     *
+     * @param http HttpSecurity object to configure security
+     * @return The configured SecurityFilterChain
+     * @throws Exception If an error occurs during configuration
+     */
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
@@ -42,6 +63,11 @@ public class WebSecurityConfig {
         return http.build();
     }
 
+    /**
+     * Configures DaoAuthenticationProvider.
+     *
+     * @return Configured DaoAuthenticationProvider
+     */
     @Bean
     public DaoAuthenticationProvider daoAuthenticationProvider() {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
@@ -50,11 +76,24 @@ public class WebSecurityConfig {
         return provider;
     }
 
+    /**
+     * Configures AuthenticationManager.
+     *
+     * @param authenticationConfiguration AuthenticationConfiguration object to get AuthenticationManager
+     * @return Configured AuthenticationManager
+     * @throws Exception If an error occurs during configuration
+     */
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
     }
 
+
+    /**
+     * Configures UserDetailsService.
+     *
+     * @return Configured UserDetailsService
+     */
     @Bean
     public UserDetailsService userDetailsService() {
         return appUserService;
