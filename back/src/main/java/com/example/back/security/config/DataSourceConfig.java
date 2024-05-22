@@ -30,7 +30,7 @@ public class DataSourceConfig {
     public DataSource dataSource() {
     	
     	/**
-    	 * The username from the encoded properties.
+    	 * The email from the encoded properties.
     	 */
         String encodedUsername = env.getProperty("spring.datasource.username");
         
@@ -40,7 +40,7 @@ public class DataSourceConfig {
         String encodedPassword = env.getProperty("spring.datasource.password");
 
     	/**
-    	 * The username using Base64 decoding.
+    	 * The email using Base64 decoding.
     	 */
         String username = new String(Base64.getDecoder().decode(encodedUsername));
         

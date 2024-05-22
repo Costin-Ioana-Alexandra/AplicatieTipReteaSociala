@@ -82,9 +82,9 @@ public class JwtUtil {
     }
 
     /**
-     * Generates a JWT token for the specified username.
+     * Generates a JWT token for the specified email.
      *
-     * @param username the username for whom the token is generated.
+     * @param username the email for whom the token is generated.
      * @return the generated JWT token.
      */
     public String generateToken(String username) {

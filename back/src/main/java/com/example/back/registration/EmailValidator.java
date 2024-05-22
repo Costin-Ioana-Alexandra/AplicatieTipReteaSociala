@@ -25,7 +25,6 @@ public class EmailValidator implements Predicate<String> {
     /**
      * Tests if the given string is a valid email address.
      *
-     * @param email the email address to be validated
      * @return true if the email address is valid, false otherwise
      */
     @Override
