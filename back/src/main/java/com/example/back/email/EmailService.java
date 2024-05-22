@@ -10,14 +10,22 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+/**
+ * Represents a service class for sending emails.
+ */
 @Service
 @AllArgsConstructor
 public class EmailService implements EmailSender {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(EmailService.class);
-
     private final JavaMailSender mailSender;
 
+    /**
+     * Sends an email to the specified recipient.
+     *
+     * @param receiver the recipient's email address
+     * @param email    the content of the email
+     */
     @Override
     @Async
     public void send(String receiver, String email) {
