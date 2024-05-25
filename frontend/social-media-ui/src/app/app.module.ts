@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { AppRoutingModule } from './app-routing.module'; 
+import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { SignupComponent } from './signup/signup.component';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
@@ -23,11 +23,17 @@ import { SettingsComponent } from './settings/settings.component';
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule, 
+    BrowserTransferStateModule,
+    TransferHttpCacheModule,
+    AppRoutingModule,
     FormsModule,
     HttpClientModule
   ],
-  providers: [MessageService, FileService ],
+  providers: [
+    MessageService,
+    FileService
+    provideHttpClient({ useFetch: true }) // enable fetch
+    ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

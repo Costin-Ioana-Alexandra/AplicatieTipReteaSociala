@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { LoginComponent } from './login/login.component';
-import { SignupComponent } from './signup/signup.component';
+import { SignUpComponent } from './signup/signup.component';
 import { ActivatedRoute } from '@angular/router';
-import { CommonModule } from '@angular/common'; 
+import { CommonModule } from '@angular/common';
 
 
 @Component({
@@ -11,7 +11,7 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [RouterModule],
   template: `
-<router-outlet></router-outlet> 
+<router-outlet></router-outlet>
   `,
   styleUrl: './app.component.css'
 })
