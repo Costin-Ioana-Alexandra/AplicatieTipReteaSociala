@@ -68,6 +68,6 @@ public class AuthenticationController {
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody RegistrationRequest registrationRequest) {
         String token = registrationService.register(registrationRequest);
-        return ResponseEntity.ok(token);
+        return ResponseEntity.ok("Registration success with token: " + token);
     }
 }
