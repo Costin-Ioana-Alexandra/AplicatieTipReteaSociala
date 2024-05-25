@@ -1,108 +1,66 @@
 package com.example.back.appuser;
 
-import org.junit.jupiter.api.Test;
-
 import static org.junit.jupiter.api.Assertions.*;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.security.core.GrantedAuthority;
+import java.util.Collection;
 
 class AppUserTest {
 
-    @Test
-    void getAuthorities() {
+    private AppUser appUser;
+    private final String firstName = "John";
+    private final String lastName = "Doe";
+    private final String email = "john.doe@example.com";
+    private final String password = "password";
+    private final AppUserRole role = AppUserRole.USER;
+
+    @BeforeEach
+    void setUp() {
+        appUser = new AppUser(firstName, lastName, email, password, role);
     }
 
     @Test
-    void getPassword() {
+    void testConstructorAndGetters() {
+        assertEquals(firstName, appUser.getFirstName());
+        assertEquals(lastName, appUser.getLastName());
+        assertEquals(email, appUser.getUsername()); // getUsername() returns email
+        assertEquals(password, appUser.getPassword());
+        assertEquals(role, appUser.getAppUserRole());
+        assertFalse(appUser.getLocked());
+        assertFalse(appUser.isEnabled());
     }
 
     @Test
-    void getUsername() {
+    void testGetAuthorities() {
+        Collection<? extends GrantedAuthority> authorities = appUser.getAuthorities();
+        assertNotNull(authorities);
+        assertEquals(1, authorities.size());
+        assertEquals(role.name(), authorities.iterator().next().getAuthority());
     }
 
     @Test
-    void isAccountNonExpired() {
+    void testAccountNonExpired() {
+        assertTrue(appUser.isAccountNonExpired());
     }
 
     @Test
-    void isAccountNonLocked() {
+    void testAccountNonLocked() {
+        assertTrue(appUser.isAccountNonLocked());
+        appUser.setLocked(true);
+        assertFalse(appUser.isAccountNonLocked());
     }
 
     @Test
-    void isCredentialsNonExpired() {
+    void testCredentialsNonExpired() {
+        assertTrue(appUser.isCredentialsNonExpired());
     }
 
     @Test
-    void isEnabled() {
-    }
-
-    @Test
-    void testEquals() {
-    }
-
-    @Test
-    void canEqual() {
-    }
-
-    @Test
-    void testHashCode() {
-    }
-
-    @Test
-    void getId() {
-    }
-
-    @Test
-    void getEmail() {
-    }
-
-    @Test
-    void getAppUserRole() {
-    }
-
-    @Test
-    void getLocked() {
-    }
-
-    @Test
-    void getEnabled() {
-    }
-
-    @Test
-    void setId() {
-    }
-
-    @Test
-    void setFirstName() {
-    }
-
-    @Test
-    void setLastName() {
-    }
-
-    @Test
-    void setEmail() {
-    }
-
-    @Test
-    void setPassword() {
-    }
-
-    @Test
-    void setAppUserRole() {
-    }
-
-    @Test
-    void setLocked() {
-    }
-
-    @Test
-    void setEnabled() {
-    }
-
-    @Test
-    void getFirstName() {
-    }
-
-    @Test
-    void getLastName() {
+    void testIsEnabled() {
+        assertFalse(appUser.isEnabled());
+        appUser.setEnabled(true);
+        assertTrue(appUser.isEnabled());
     }
 }
