@@ -25,9 +25,6 @@ class DataSourceConfigTest {
     	// to be done
     }
 
-
-
-
     @Test
     void testMissingDataSourceProperties() {
         // to be done

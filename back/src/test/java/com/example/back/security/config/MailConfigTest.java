@@ -43,4 +43,3 @@ class MailConfigTest {
         assertEquals("true", props.getProperty("mail.debug"));
     }
 }
-
