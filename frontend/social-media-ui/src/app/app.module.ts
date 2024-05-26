@@ -1,39 +1,27 @@
+// src/app/app.module.ts
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
-import { SignupComponent } from './signup/signup.component';
-import { ResetPasswordComponent } from './reset-password/reset-password.component';
-import { LoginComponent } from './login/login.component';
-import { MessagesComponent } from './messages/messages.component';
-import { MessageService } from './messages/message.service';
-import { FormsModule } from '@angular/forms';
+import { FormsModule } from '@angular/forms'; // Import FormsModule
 import { HttpClientModule } from '@angular/common/http';
-import { FileService } from './messages/file.service';
-import { SettingsComponent } from './settings/settings.component';
+
+import { AppComponent } from './app.component';
+import { LoginComponent } from './login/login.component';
+import { AuthService } from './services/auth.service';
+import { AppRoutingModule } from './app-routing.module'; // Import the routing module
+
 
 @NgModule({
   declarations: [
     AppComponent,
-    LoginComponent,
-    SignupComponent,
-    ResetPasswordComponent,
-    MessagesComponent
-    SettingsComponent
+    LoginComponent
   ],
   imports: [
     BrowserModule,
-    BrowserTransferStateModule,
-    TransferHttpCacheModule,
-    AppRoutingModule,
-    FormsModule,
-    HttpClientModule
+    FormsModule, // Add FormsModule to imports array
+    HttpClientModule,
+    AppRoutingModule // Import the routing module
   ],
-  providers: [
-    MessageService,
-    FileService
-    provideHttpClient({ useFetch: true }) // enable fetch
-    ],
+  providers: [AuthService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
