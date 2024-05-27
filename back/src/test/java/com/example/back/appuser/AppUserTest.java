@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.security.core.GrantedAuthority;
 import java.util.Collection;
 
-class AppUserTest {
+public class AppUserTest {
 
     private AppUser appUser;
     private final String firstName = "John";

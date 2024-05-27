@@ -8,7 +8,7 @@ import com.example.back.appuser.AppUserRole;
 
 import java.time.LocalDateTime;
 
-class ConfirmationTokenTest {
+public class ConfirmationTokenTest {
 
     @Test
     void testConstructorAndGetters() {

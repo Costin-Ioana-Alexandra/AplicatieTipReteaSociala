@@ -15,7 +15,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import com.example.back.registration.RegistrationRequest;
 import com.example.back.registration.RegistrationService;
 
-class AuthenticationControllerTest {
+public class AuthenticationControllerTest {
 
     @Test
     void testCreateAuthenticationToken_SuccessfulAuthentication() {

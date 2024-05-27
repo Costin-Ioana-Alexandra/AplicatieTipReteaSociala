@@ -12,7 +12,7 @@ import org.mockito.MockitoAnnotations;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class RegistrationServiceTest {
+public class RegistrationServiceTest {
 
     @Mock
     private AppUserService appUserService;

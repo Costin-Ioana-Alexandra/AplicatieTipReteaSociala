@@ -14,7 +14,7 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class EmailServiceTest {
+public class EmailServiceTest {
 
     @Mock
     private JavaMailSender mailSender;

@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 
-class MailConfigTest {
+public class MailConfigTest {
 
     private MailConfig mailConfig;
 

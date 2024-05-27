@@ -12,7 +12,7 @@ import com.zaxxer.hikari.HikariDataSource;
 import javax.sql.DataSource;
 import static org.mockito.Mockito.*;
 
-class DataSourceConfigTest {
+public class DataSourceConfigTest {
 
     @Mock
     private Environment env;
