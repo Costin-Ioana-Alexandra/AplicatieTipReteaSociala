@@ -28,7 +28,7 @@ public class EmailValidator implements Predicate<String> {
    * @return true if the email address is valid, false otherwise
    */
   @Override
-  public boolean test(String s) {
+  public boolean test(final String s) {
     Matcher matcher = pattern.matcher(s);
     return matcher.matches();
   }

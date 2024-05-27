@@ -33,7 +33,7 @@ public class JwtUtil {
    * @param token the JWT token.
    * @return the extracted username.
    */
-  public String extractUsername(String token) {
+  public String extractUsername(final String token) {
     return extractClaim(token, Claims::getSubject);
   }
 
@@ -43,7 +43,7 @@ public class JwtUtil {
    * @param token the JWT token.
    * @return the expiration date.
    */
-  public Date extractExpiration(String token) {
+  public Date extractExpiration(final String token) {
     return extractClaim(token, Claims::getExpiration);
   }
 
@@ -55,7 +55,7 @@ public class JwtUtil {
    * @param <T>            the type of the claim.
    * @return the extracted claim.
    */
-  public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
+  public <T> T extractClaim(final String token, final Function<Claims, T> claimsResolver) {
     final Claims claims = extractAllClaims(token);
     return claimsResolver.apply(claims);
   }
@@ -66,7 +66,7 @@ public class JwtUtil {
    * @param token the JWT token.
    * @return all claims.
    */
-  private Claims extractAllClaims(String token) {
+  private Claims extractAllClaims(final String token) {
     return Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token).getBody();
   }
 
@@ -76,7 +76,7 @@ public class JwtUtil {
    * @param token the JWT token.
    * @return true if the token is expired, false otherwise.
    */
-  private Boolean isTokenExpired(String token) {
+  private Boolean isTokenExpired(final String token) {
     return extractExpiration(token).before(new Date());
   }
 
@@ -86,7 +86,7 @@ public class JwtUtil {
    * @param username the email for whom the token is generated.
    * @return the generated JWT token.
    */
-  public String generateToken(String username) {
+  public String generateToken(final String username) {
     Map<String, Object> claims = new HashMap<>();
     return createToken(claims, username);
   }
@@ -98,7 +98,7 @@ public class JwtUtil {
    * @param subject the subject of the token.
    * @return the created JWT token.
    */
-  private String createToken(Map<String, Object> claims, String subject) {
+  private String createToken(final Map<String, Object> claims, final String subject) {
     return Jwts.builder().setClaims(claims).setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis()))
         .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10))
         .signWith(SignatureAlgorithm.HS256, SECRET_KEY).compact();
@@ -111,7 +111,7 @@ public class JwtUtil {
    * @param username the username against which the token is validated.
    * @return true if the token is valid, false otherwise.
    */
-  public Boolean validateToken(String token, String username) {
+  public Boolean validateToken(final String token, final String username) {
     final String extractedUsername = extractUsername(token);
     return (extractedUsername.equals(username) && !isTokenExpired(token));
   }

@@ -17,7 +17,14 @@ import org.springframework.stereotype.Service;
 @AllArgsConstructor
 public class EmailService implements EmailSender {
 
-  private final static Logger LOGGER = LoggerFactory.getLogger(EmailService.class);
+  /**
+   * Logger for logging email sending errors and information.
+   */
+  private static final Logger LOGGER = LoggerFactory.getLogger(EmailService.class);
+  
+  /**
+   * JavaMailSender for creating and sending emails.
+   */
   private final JavaMailSender mailSender;
 
   /**
@@ -28,7 +35,7 @@ public class EmailService implements EmailSender {
    */
   @Override
   @Async
-  public void send(String receiver, String email) {
+  public void send(final String receiver, final String email) {
     try {
       MimeMessage mimeMessage = mailSender.createMimeMessage();
       MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "utf-8");

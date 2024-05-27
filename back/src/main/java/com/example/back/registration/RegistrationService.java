@@ -45,7 +45,7 @@ public class RegistrationService {
    * @param request the registration request containing user details
    * @return the confirmation token
    */
-  public String register(RegistrationRequest request) {
+  public String register(final RegistrationRequest request) {
     boolean isValidEmail = emailValidator.test(request.getEmail());
 
     if (!isValidEmail) {
@@ -55,14 +55,7 @@ public class RegistrationService {
     String token = appUserService.signUpUser(new AppUser(request.getFirstName(), request.getLastName(),
         request.getEmail(), request.getPassword(), AppUserRole.USER));
 
-    /**
-     * Prepares the activation link.
-     */
     String link = "http://localhost:8080/api/v1/registration/confirm?token=" + token;
-
-    /**
-     * Sends the link with the application link.
-     */
     emailSender.send(request.getEmail(), buildEmail(request.getFirstName(), link));
 
     return token;
@@ -75,7 +68,7 @@ public class RegistrationService {
    * @return a success message
    */
   @Transactional
-  public String confirmToken(String token) {
+  public String confirmToken(final String token) {
     ConfirmationToken confirmationToken = confirmationTokenService.getToken(token)
         .orElseThrow(() -> new IllegalStateException("token not found"));
 
@@ -133,7 +126,7 @@ public class RegistrationService {
    * @param link the confirmation link
    * @return the email content as a string
    */
-  private String buildEmail(String name, String link) {
+  private String buildEmail(final String name, final String link) {
     return "<div style=\"font-family:Helvetica,Arial,sans-serif;font-size:16px;margin:0;color:#0b0c0c\">\n" + "\n"
         + "<span style=\"display:none;font-size:1px;color:#fff;max-height:0\"></span>\n" + "\n"
         + "  <table role=\"presentation\" width=\"100%\" style=\"border-collapse:collapse;min-width:100%;width:100%!important\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\">\n"

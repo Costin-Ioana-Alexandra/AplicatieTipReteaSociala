@@ -1,6 +1,5 @@
 package com.example.back.security;
 
-import com.example.back.appuser.AppUser;
 import com.example.back.appuser.AppUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -31,7 +30,7 @@ public class CustomUserDetailsService implements UserDetailsService {
    * @throws UsernameNotFoundException if the user could not be found.
    */
   @Override
-  public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+  public UserDetails loadUserByUsername(final String email) throws UsernameNotFoundException {
     return appUserService.findByEmail(email).map(CustomUserDetails::new)
         .orElseThrow(() -> new UsernameNotFoundException("User not found"));
   }

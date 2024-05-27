@@ -24,7 +24,7 @@ public class CustomUserDetails implements UserDetails {
    *
    * @param appUser The application user associated with these user details.
    */
-  public CustomUserDetails(AppUser appUser) {
+  public CustomUserDetails(final AppUser appUser) {
     this.appUser = appUser;
   }
 

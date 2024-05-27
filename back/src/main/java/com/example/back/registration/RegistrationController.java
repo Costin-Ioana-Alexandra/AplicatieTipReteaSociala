@@ -28,7 +28,7 @@ public class RegistrationController {
    * @return a response message from the registration service
    */
   @PostMapping
-  public String register(@RequestBody RegistrationRequest request) {
+  public String register(@RequestBody final RegistrationRequest request) {
     return registrationService.register(request);
   }
 
@@ -39,7 +39,7 @@ public class RegistrationController {
    * @return a response message from the registration service
    */
   @GetMapping(path = "confirm")
-  public String confirm(@RequestParam("token") String token) {
+  public String confirm(@RequestParam("token") final String token) {
     return registrationService.confirmToken(token);
   }
 }

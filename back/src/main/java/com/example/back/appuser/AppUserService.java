@@ -1,6 +1,5 @@
 package com.example.back.appuser;
 
-import com.example.back.registration.token.ConfirmationToken;
 import com.example.back.registration.token.ConfirmationTokenService;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -14,15 +13,30 @@ import java.util.Optional;
 import java.util.UUID;
 
 /**
- * Represents a service class for managing users.
+ * Represents a class service for managing users.
  */
 @Service
 @AllArgsConstructor
 public class AppUserService implements UserDetailsService {
 
-  private final static String USER_NOT_FOUND = "user with %s not found";
+  /**
+   * Message for a not found user.
+   */
+  private static final String USER_NOT_FOUND = "user with %s not found";
+
+  /**
+   * Repository for accessing user data.
+   */
   private final AppUserRepository appUserRepository;
+
+  /**
+   * Encoder for encrypting user passwords.
+   */
   private final BCryptPasswordEncoder bCryptPasswordEncoder;
+
+  /**
+   * Service for handling confirmation tokens.
+   */
   private final ConfirmationTokenService confirmationTokenService;
 
   /**
@@ -53,6 +67,7 @@ public class AppUserService implements UserDetailsService {
    *
    * @param appUser the user to sign up
    * @return a confirmation token for email verification
+   * @throws IllegalStateException if the email is already taken
    */
   public String signUpUser(final AppUser appUser) {
     String email = appUser.getEmail();

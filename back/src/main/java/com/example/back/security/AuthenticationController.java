@@ -1,6 +1,5 @@
 package com.example.back.security;
 
-import com.example.back.appuser.AppUser;
 import com.example.back.registration.RegistrationRequest;
 import com.example.back.registration.RegistrationService;
 import lombok.RequiredArgsConstructor;
@@ -48,7 +47,7 @@ public class AuthenticationController {
    *         otherwise returns ResponseEntity with UNAUTHORIZED status
    */
   @PostMapping("/login")
-  public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest) {
+  public ResponseEntity<?> createAuthenticationToken(@RequestBody final AuthenticationRequest authenticationRequest) {
     try {
       Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
           authenticationRequest.getEmail(), authenticationRequest.getPassword()));
@@ -69,7 +68,7 @@ public class AuthenticationController {
    * @return ResponseEntity containing the registration token
    */
   @PostMapping("/register")
-  public ResponseEntity<?> register(@RequestBody RegistrationRequest registrationRequest) {
+  public ResponseEntity<?> register(@RequestBody final RegistrationRequest registrationRequest) {
     String token = registrationService.register(registrationRequest);
     return ResponseEntity.ok("Registration success with token: " + token);
   }

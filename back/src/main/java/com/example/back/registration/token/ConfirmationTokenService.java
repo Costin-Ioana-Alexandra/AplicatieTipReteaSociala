@@ -23,7 +23,7 @@ public class ConfirmationTokenService {
    *
    * @param token The confirmation token to save.
    */
-  public void saveConfirmationToken(ConfirmationToken token) {
+  public void saveConfirmationToken(final ConfirmationToken token) {
     confirmationTokenRepository.save(token);
   }
 
@@ -34,7 +34,7 @@ public class ConfirmationTokenService {
    * @return An optional containing the confirmation token if found, otherwise
    *         empty.
    */
-  public Optional<ConfirmationToken> getToken(String token) {
+  public Optional<ConfirmationToken> getToken(final String token) {
     return confirmationTokenRepository.findByToken(token);
   }
 
@@ -45,7 +45,7 @@ public class ConfirmationTokenService {
    * @param token The token string.
    * @return The number of tokens updated.
    */
-  public int setConfirmedAt(String token) {
+  public int setConfirmedAt(final String token) {
     return confirmationTokenRepository.updateConfirmedAt(token, LocalDateTime.now());
   }
 }

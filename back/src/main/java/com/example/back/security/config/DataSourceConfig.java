@@ -29,24 +29,9 @@ public class DataSourceConfig {
   @Bean
   public DataSource dataSource() {
 
-    /**
-     * The email from the encoded properties.
-     */
     String encodedUsername = env.getProperty("spring.datasource.username");
-
-    /**
-     * The password from the encoded properties.
-     */
     String encodedPassword = env.getProperty("spring.datasource.password");
-
-    /**
-     * The email using Base64 decoding.
-     */
     String username = new String(Base64.getDecoder().decode(encodedUsername));
-
-    /**
-     * The email using Base64 decoding.
-     */
     String password = new String(Base64.getDecoder().decode(encodedPassword));
 
     /**
