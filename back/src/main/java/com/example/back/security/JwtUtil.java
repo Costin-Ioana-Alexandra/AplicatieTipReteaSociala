@@ -1,15 +1,16 @@
 package com.example.back.security;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import org.springframework.stereotype.Component;
-
 import java.util.Base64;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
+
+import org.springframework.stereotype.Component;
+
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 
 /**
  * Represents the utility class for JWT (JSON Web Token) operations.
@@ -26,6 +27,11 @@ public class JwtUtil {
    * The secret key used for signing the JWT.
    */
   private final String SECRET_KEY = new String(Base64.getDecoder().decode(ENCODED_KEY));
+
+  /**
+   * The duration of the token validity in milliseconds.
+   */
+  private static final long TOKEN_VALIDITY_DURATION_MS = 1000L * 60 * 60 * 10;
 
   /**
    * Extracts the username from the JWT token.
@@ -100,7 +106,7 @@ public class JwtUtil {
    */
   private String createToken(final Map<String, Object> claims, final String subject) {
     return Jwts.builder().setClaims(claims).setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis()))
-        .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10))
+        .setExpiration(new Date(System.currentTimeMillis() + TOKEN_VALIDITY_DURATION_MS))
         .signWith(SignatureAlgorithm.HS256, SECRET_KEY).compact();
   }
 

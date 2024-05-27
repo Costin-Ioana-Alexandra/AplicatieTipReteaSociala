@@ -1,11 +1,7 @@
 package com.example.back.security;
 
-import com.example.back.appuser.AppUserService;
-import jakarta.servlet.FilterChain;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import lombok.RequiredArgsConstructor;
+import java.io.IOException;
+
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,7 +9,13 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import java.io.IOException;
+import com.example.back.appuser.AppUserService;
+
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
 
 /**
  * Represents a class filter for intercepting incoming requests and processing
@@ -34,6 +36,11 @@ public class JwtRequestFilter extends OncePerRequestFilter {
   private final JwtUtil jwtUtil;
 
   /**
+   * The length of the "Bearer" prefix in the Authorization header.
+   */
+  private static final int BEARER_PREFIX_LENGTH = 7;
+
+  /**
    * Performs filtering logic for each incoming request.
    *
    * @param request     the incoming HTTP request.
@@ -43,15 +50,15 @@ public class JwtRequestFilter extends OncePerRequestFilter {
    * @throws IOException      if an I/O error occurs.
    */
   @Override
-  protected void doFilterInternal(final HttpServletRequest request, final HttpServletResponse response, final FilterChain filterChain)
-      throws ServletException, IOException {
+  protected void doFilterInternal(final HttpServletRequest request, final HttpServletResponse response,
+      final FilterChain filterChain) throws ServletException, IOException {
     final String authorizationHeader = request.getHeader("Authorization");
 
     String username = null;
     String jwt = null;
 
     if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
-      int startIndex = 7;
+      int startIndex = BEARER_PREFIX_LENGTH;
       jwt = authorizationHeader.substring(startIndex);
       username = jwtUtil.extractUsername(jwt);
     }

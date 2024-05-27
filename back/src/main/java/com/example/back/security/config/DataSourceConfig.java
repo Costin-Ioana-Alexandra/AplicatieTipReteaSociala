@@ -1,12 +1,14 @@
 package com.example.back.security.config;
 
+import java.util.Base64;
+
+import javax.sql.DataSource;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
-import javax.sql.DataSource;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.jdbc.DataSourceBuilder;
-import java.util.Base64;
 
 /**
  * Represents a class configuration for setting up the data source.
@@ -34,9 +36,6 @@ public class DataSourceConfig {
     String username = new String(Base64.getDecoder().decode(encodedUsername));
     String password = new String(Base64.getDecoder().decode(encodedPassword));
 
-    /**
-     * Builds and returns a configured DataSource object.
-     */
     return DataSourceBuilder.create().url(env.getProperty("spring.datasource.url")).username(username)
         .password(password)
         .driverClassName(env.getProperty("spring.datasource.driver-class-name", "org.postgresql.Driver")).build();

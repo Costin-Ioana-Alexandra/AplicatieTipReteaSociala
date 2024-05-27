@@ -1,16 +1,19 @@
 package com.example.back.appuser;
 
-import com.example.back.registration.token.ConfirmationTokenService;
-import lombok.AllArgsConstructor;
+import java.time.LocalDateTime;
+import java.util.Optional;
+import java.util.UUID;
+
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
-import java.util.Optional;
-import java.util.UUID;
+import com.example.back.registration.token.ConfirmationToken;
+import com.example.back.registration.token.ConfirmationTokenService;
+
+import lombok.AllArgsConstructor;
 
 /**
  * Represents a class service for managing users.
@@ -23,6 +26,11 @@ public class AppUserService implements UserDetailsService {
    * Message for a not found user.
    */
   private static final String USER_NOT_FOUND = "user with %s not found";
+
+  /**
+   * The validity duration of the confirmation token in minutes.
+   */
+  private static final int CONFIRMATION_TOKEN_VALIDITY_MINUTES = 15;
 
   /**
    * Repository for accessing user data.
@@ -84,7 +92,7 @@ public class AppUserService implements UserDetailsService {
 
     String token = UUID.randomUUID().toString();
     ConfirmationToken confirmationToken = new ConfirmationToken(token, LocalDateTime.now(),
-        LocalDateTime.now().plusMinutes(15), appUser);
+        LocalDateTime.now().plusMinutes(CONFIRMATION_TOKEN_VALIDITY_MINUTES), appUser);
 
     confirmationTokenService.saveConfirmationToken(confirmationToken);
 

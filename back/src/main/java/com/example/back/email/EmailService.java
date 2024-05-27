@@ -1,14 +1,15 @@
 package com.example.back.email;
 
-import jakarta.mail.MessagingException;
-import jakarta.mail.internet.MimeMessage;
-import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeMessage;
+import lombok.AllArgsConstructor;
 
 /**
  * Represents a service class for sending emails.
@@ -21,7 +22,7 @@ public class EmailService implements EmailSender {
    * Logger for logging email sending errors and information.
    */
   private static final Logger LOGGER = LoggerFactory.getLogger(EmailService.class);
-  
+
   /**
    * JavaMailSender for creating and sending emails.
    */

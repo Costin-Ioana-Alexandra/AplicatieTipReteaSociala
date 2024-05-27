@@ -1,6 +1,9 @@
 package com.example.back.registration.token;
 
+import java.time.LocalDateTime;
+
 import com.example.back.appuser.AppUser;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -12,8 +15,6 @@ import jakarta.persistence.SequenceGenerator;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.time.LocalDateTime;
 
 /**
  * Represents a confirmation token used for account verification.
@@ -70,7 +71,8 @@ public class ConfirmationToken {
    * @param expiresAt The date and time when the token expires.
    * @param appUser   The user associated with the token.
    */
-  public ConfirmationToken(final String token, final LocalDateTime createdAt, final LocalDateTime expiresAt, final AppUser appUser) {
+  public ConfirmationToken(final String token, final LocalDateTime createdAt, final LocalDateTime expiresAt,
+      final AppUser appUser) {
     this.token = token;
     this.createdAt = createdAt;
     this.expiresAt = expiresAt;

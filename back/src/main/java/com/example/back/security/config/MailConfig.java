@@ -1,17 +1,22 @@
 package com.example.back.security.config;
 
+import java.util.Properties;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
-
-import java.util.Properties;
 
 /**
  * Represents a class configuration for sending emails.
  */
 @Configuration
 public class MailConfig {
+
+  /**
+   * The port used for SMTP communication.
+   */
+  private static final int SMTP_PORT = 2525;
 
   /**
    * Configures and returns a JavaMailSender instance for sending emails.
@@ -24,7 +29,7 @@ public class MailConfig {
     JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
 
     mailSender.setHost("sandbox.smtp.mailtrap.io");
-    mailSender.setPort(2525);
+    mailSender.setPort(SMTP_PORT);
     mailSender.setUsername("851798ac859e68");
     mailSender.setPassword("8dca44c26b0fda");
 
