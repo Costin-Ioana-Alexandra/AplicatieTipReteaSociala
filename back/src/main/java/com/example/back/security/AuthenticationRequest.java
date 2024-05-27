@@ -11,14 +11,14 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AuthenticationRequest {
-	
-	/**
-     * The email of the user.
-     */
-    private String email;
-    
-    /**
-     * The password of the user.
-     */
-    private String password;
+
+  /**
+   * The email of the user.
+   */
+  private String email;
+
+  /**
+   * The password of the user.
+   */
+  private String password;
 }

@@ -15,25 +15,24 @@ import java.util.Optional;
 @Transactional(readOnly = true)
 public interface AppUserRepository extends JpaRepository<AppUser, Long> {
 
-    /**
-     * Finds an {@link AppUser} by their email.
-     *
-     * @param email the email of the user
-     * @return an {@link Optional} containing the user if found, or empty if not found
-     */
-    Optional<AppUser> findByEmail(String email);
+  /**
+   * Finds an {@link AppUser} by their email.
+   *
+   * @param email the email of the user
+   * @return an {@link Optional} containing the user if found, or empty if not
+   *         found
+   */
+  Optional<AppUser> findByEmail(String email);
 
-
-    /**
-     * Enables an {@link AppUser} by setting their enabled status to true.
-     *
-     * @param email the email of the user to be enabled
-     * @return the number of rows affected
-     */
-    @Transactional
-    @Modifying
-    @Query("UPDATE AppUser a " +
-            "SET a.enabled = TRUE WHERE a.email = ?1")
-    int enableAppUser(String email);
+  /**
+   * Enables an {@link AppUser} by setting their enabled status to true.
+   *
+   * @param email the email of the user to be enabled
+   * @return the number of rows affected
+   */
+  @Transactional
+  @Modifying
+  @Query("UPDATE AppUser a " + "SET a.enabled = TRUE WHERE a.email = ?1")
+  int enableAppUser(String email);
 
 }

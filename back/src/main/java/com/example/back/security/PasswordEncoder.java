@@ -10,13 +10,13 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 @Configuration
 public class PasswordEncoder {
 
-    /**
-     * Creates a BCrypt password encoder bean.
-     *
-     * @return the BCryptPasswordEncoder bean.
-     */
-    @Bean
-    public BCryptPasswordEncoder bCryptPasswordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+  /**
+   * Creates a BCrypt password encoder bean.
+   *
+   * @return the BCryptPasswordEncoder bean.
+   */
+  @Bean
+  public BCryptPasswordEncoder bCryptPasswordEncoder() {
+    return new BCryptPasswordEncoder();
+  }
 }

@@ -9,9 +9,9 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class AuthenticationResponse {
-	
-    /**
-     * The JWT token generated for successful authentication.
-     */
-    private final String jwt;
+
+  /**
+   * The JWT token generated for successful authentication.
+   */
+  private final String jwt;
 }

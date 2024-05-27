@@ -9,28 +9,30 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 /**
- * Represents the class implementation of Spring Security UserDetailsService interface for loading user-specific data.
+ * Represents the class implementation of Spring Security UserDetailsService
+ * interface for loading user-specific data.
  */
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
 
-    /**
-     * Service for interacting with application users.
-     */
-    @Autowired
-    private AppUserService appUserService;
+  /**
+   * Service for interacting with application users.
+   */
+  @Autowired
+  private AppUserService appUserService;
 
-    /**
-     * Locates the user based on the username. In this case, it uses the email to find the user.
-     *
-     * @param email the email address identifying the user whose data is required.
-     * @return A UserDetails object that Spring Security uses for authentication and validation.
-     * @throws UsernameNotFoundException if the user could not be found.
-     */
-    @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        return appUserService.findByEmail(email)
-                .map(CustomUserDetails::new)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
-    }
+  /**
+   * Locates the user based on the username. In this case, it uses the email to
+   * find the user.
+   *
+   * @param email the email address identifying the user whose data is required.
+   * @return A UserDetails object that Spring Security uses for authentication and
+   *         validation.
+   * @throws UsernameNotFoundException if the user could not be found.
+   */
+  @Override
+  public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+    return appUserService.findByEmail(email).map(CustomUserDetails::new)
+        .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+  }
 }

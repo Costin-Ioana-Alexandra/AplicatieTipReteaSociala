@@ -13,38 +13,39 @@ import java.util.Optional;
 @AllArgsConstructor
 public class ConfirmationTokenService {
 
-	/**
-	 * Repository for managing confirmation tokens.
-	 */
-    private final ConfirmationTokenRepository confirmationTokenRepository;
+  /**
+   * Repository for managing confirmation tokens.
+   */
+  private final ConfirmationTokenRepository confirmationTokenRepository;
 
-    /**
-     * Saves a confirmation token.
-     *
-     * @param token The confirmation token to save.
-     */
-    public void saveConfirmationToken(ConfirmationToken token) {
-        confirmationTokenRepository.save(token);
-    }
-    
-    /**
-     * Retrieves a confirmation token by its token string.
-     *
-     * @param token The token string.
-     * @return An optional containing the confirmation token if found, otherwise empty.
-     */
-    public Optional<ConfirmationToken> getToken(String token) {
-        return confirmationTokenRepository.findByToken(token);
-    }
+  /**
+   * Saves a confirmation token.
+   *
+   * @param token The confirmation token to save.
+   */
+  public void saveConfirmationToken(ConfirmationToken token) {
+    confirmationTokenRepository.save(token);
+  }
 
-    /**
-     * Sets the confirmation time of a confirmation token to the current date and time.
-     *
-     * @param token The token string.
-     * @return The number of tokens updated.
-     */
-    public int setConfirmedAt(String token) {
-        return confirmationTokenRepository.updateConfirmedAt(
-                token, LocalDateTime.now());
-    }
+  /**
+   * Retrieves a confirmation token by its token string.
+   *
+   * @param token The token string.
+   * @return An optional containing the confirmation token if found, otherwise
+   *         empty.
+   */
+  public Optional<ConfirmationToken> getToken(String token) {
+    return confirmationTokenRepository.findByToken(token);
+  }
+
+  /**
+   * Sets the confirmation time of a confirmation token to the current date and
+   * time.
+   *
+   * @param token The token string.
+   * @return The number of tokens updated.
+   */
+  public int setConfirmedAt(String token) {
+    return confirmationTokenRepository.updateConfirmedAt(token, LocalDateTime.now());
+  }
 }

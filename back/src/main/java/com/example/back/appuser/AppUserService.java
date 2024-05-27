@@ -20,73 +20,69 @@ import java.util.UUID;
 @AllArgsConstructor
 public class AppUserService implements UserDetailsService {
 
-    private final static String USER_NOT_FOUND = "user with %s not found";
-    private final AppUserRepository appUserRepository;
-    private final BCryptPasswordEncoder bCryptPasswordEncoder;
-    private final ConfirmationTokenService confirmationTokenService;
+  private final static String USER_NOT_FOUND = "user with %s not found";
+  private final AppUserRepository appUserRepository;
+  private final BCryptPasswordEncoder bCryptPasswordEncoder;
+  private final ConfirmationTokenService confirmationTokenService;
 
-    /**
-     * Loads a user by their email.
-     *
-     * @param email the email of the user to load
-     * @return the user details
-     * @throws UsernameNotFoundException if the user is not found
-     */
-    @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        return appUserRepository.findByEmail(email).orElseThrow(() ->
-                new UsernameNotFoundException(String.format(USER_NOT_FOUND, email)));
+  /**
+   * Loads a user by their email.
+   *
+   * @param email the email of the user to load
+   * @return the user details
+   * @throws UsernameNotFoundException if the user is not found
+   */
+  @Override
+  public UserDetails loadUserByUsername(final String email) throws UsernameNotFoundException {
+    return appUserRepository.findByEmail(email)
+        .orElseThrow(() -> new UsernameNotFoundException(String.format(USER_NOT_FOUND, email)));
+  }
+
+  /**
+   * Finds a user by their email.
+   *
+   * @param email the email of the user
+   * @return an Optional containing the user if found, or empty if not found
+   */
+  public Optional<AppUser> findByEmail(final String email) {
+    return appUserRepository.findByEmail(email);
+  }
+
+  /**
+   * Signs up a new user.
+   *
+   * @param appUser the user to sign up
+   * @return a confirmation token for email verification
+   */
+  public String signUpUser(final AppUser appUser) {
+    String email = appUser.getEmail();
+    boolean userExist = appUserRepository.findByEmail(email).isPresent();
+
+    if (userExist) {
+      throw new IllegalStateException("This email is already taken!");
     }
 
-    /**
-     * Finds a user by their email.
-     *
-     * @param email the email of the user
-     * @return an Optional containing the user if found, or empty if not found
-     */
-    public Optional<AppUser> findByEmail(String email) {
-        return appUserRepository.findByEmail(email);
-    }
+    String encodedPass = bCryptPasswordEncoder.encode(appUser.getPassword());
+    appUser.setPassword(encodedPass);
 
-    /**
-     * Signs up a new user.
-     *
-     * @param appUser the user to sign up
-     * @return a confirmation token for email verification
-     */
-    public String signUpUser(AppUser appUser) {
-        String email = appUser.getEmail();
-        boolean userExist = appUserRepository.findByEmail(email).isPresent();
+    appUserRepository.save(appUser);
 
-        if(userExist) {
-            throw new IllegalStateException("This email is already taken!");
-        }
+    String token = UUID.randomUUID().toString();
+    ConfirmationToken confirmationToken = new ConfirmationToken(token, LocalDateTime.now(),
+        LocalDateTime.now().plusMinutes(15), appUser);
 
-        String encodedPass = bCryptPasswordEncoder.encode(appUser.getPassword());
-        appUser.setPassword(encodedPass);
+    confirmationTokenService.saveConfirmationToken(confirmationToken);
 
-        appUserRepository.save(appUser);
+    return token;
+  }
 
-        String token = UUID.randomUUID().toString();
-        ConfirmationToken confirmationToken= new ConfirmationToken(
-                token,
-                LocalDateTime.now(),
-                LocalDateTime.now().plusMinutes(15),
-                appUser
-        );
-
-        confirmationTokenService.saveConfirmationToken(confirmationToken);
-
-        return token;
-    }
-
-    /**
-     * Enables a user's account.
-     *
-     * @param email the email of the user to enable
-     * @return the number of affected rows
-     */
-    public int enableAppUser(String email) {
-        return appUserRepository.enableAppUser(email);
-    }
+  /**
+   * Enables a user's account.
+   *
+   * @param email the email of the user to enable
+   * @return the number of affected rows
+   */
+  public int enableAppUser(final String email) {
+    return appUserRepository.enableAppUser(email);
+  }
 }

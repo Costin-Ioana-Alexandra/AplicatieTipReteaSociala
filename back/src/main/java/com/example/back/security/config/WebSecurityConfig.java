@@ -24,78 +24,74 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 public class WebSecurityConfig {
 
-	/**
-	 * The service for managing application users.
-	 */
-    private final AppUserService appUserService;
-    
-    /**
-     * The password encoder for encoding and decoding passwords.
-     */
-    private final BCryptPasswordEncoder bCryptPasswordEncoder;
-    
-    /**
-     * The filter for handling JWT authentication requests.
-     */
-    private final JwtRequestFilter jwtRequestFilter;
+  /**
+   * The service for managing application users.
+   */
+  private final AppUserService appUserService;
 
-    /**
-     * Configures security filter chain.
-     *
-     * @param http HttpSecurity object to configure security
-     * @return The configured SecurityFilterChain
-     * @throws Exception If an error occurs during configuration
-     */
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
-                .csrf(csrf -> csrf.disable())
-                .authorizeHttpRequests(authorizeRequests ->
-                        authorizeRequests
-                                .requestMatchers("/api/v*/registration/**", "/api/v*/login").permitAll()
-                                .anyRequest().authenticated()
-                )
-                .sessionManagement(sessionManagement ->
-                        sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                )
-                .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+  /**
+   * The password encoder for encoding and decoding passwords.
+   */
+  private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
-        return http.build();
-    }
+  /**
+   * The filter for handling JWT authentication requests.
+   */
+  private final JwtRequestFilter jwtRequestFilter;
 
-    /**
-     * Configures DaoAuthenticationProvider.
-     *
-     * @return Configured DaoAuthenticationProvider
-     */
-    @Bean
-    public DaoAuthenticationProvider daoAuthenticationProvider() {
-        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
-        provider.setPasswordEncoder(bCryptPasswordEncoder);
-        provider.setUserDetailsService(appUserService);
-        return provider;
-    }
+  /**
+   * Configures security filter chain.
+   *
+   * @param http HttpSecurity object to configure security
+   * @return The configured SecurityFilterChain
+   * @throws Exception If an error occurs during configuration
+   */
+  @Bean
+  public SecurityFilterChain securityFilterChain(final HttpSecurity http) throws Exception {
+    http.csrf(csrf -> csrf.disable())
+        .authorizeHttpRequests(authorizeRequests -> authorizeRequests
+            .requestMatchers("/api/v*/registration/**", "/api/v*/login").permitAll().anyRequest().authenticated())
+        .sessionManagement(
+            sessionManagement -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+        .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
 
-    /**
-     * Configures AuthenticationManager.
-     *
-     * @param authenticationConfiguration AuthenticationConfiguration object to get AuthenticationManager
-     * @return Configured AuthenticationManager
-     * @throws Exception If an error occurs during configuration
-     */
-    @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
-        return authenticationConfiguration.getAuthenticationManager();
-    }
+    return http.build();
+  }
 
+  /**
+   * Configures DaoAuthenticationProvider.
+   *
+   * @return Configured DaoAuthenticationProvider
+   */
+  @Bean
+  public DaoAuthenticationProvider daoAuthenticationProvider() {
+    DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+    provider.setPasswordEncoder(bCryptPasswordEncoder);
+    provider.setUserDetailsService(appUserService);
+    return provider;
+  }
 
-    /**
-     * Configures UserDetailsService.
-     *
-     * @return Configured UserDetailsService
-     */
-    @Bean
-    public UserDetailsService userDetailsService() {
-        return appUserService;
-    }
+  /**
+   * Configures AuthenticationManager.
+   *
+   * @param authenticationConfiguration AuthenticationConfiguration object to get
+   *                                    AuthenticationManager
+   * @return Configured AuthenticationManager
+   * @throws Exception If an error occurs during configuration
+   */
+  @Bean
+  public AuthenticationManager authenticationManager(final AuthenticationConfiguration authenticationConfiguration)
+      throws Exception {
+    return authenticationConfiguration.getAuthenticationManager();
+  }
+
+  /**
+   * Configures UserDetailsService.
+   *
+   * @return Configured UserDetailsService
+   */
+  @Bean
+  public UserDetailsService userDetailsService() {
+    return appUserService;
+  }
 }

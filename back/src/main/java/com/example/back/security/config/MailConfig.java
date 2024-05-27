@@ -13,48 +13,48 @@ import java.util.Properties;
 @Configuration
 public class MailConfig {
 
+  /**
+   * Configures and returns a JavaMailSender instance for sending emails.
+   *
+   * @return A configured JavaMailSender instance.
+   */
+  @Bean
+  public JavaMailSender getJavaMailSender() {
+
     /**
-     * Configures and returns a JavaMailSender instance for sending emails.
-     *
-     * @return A configured JavaMailSender instance.
+     * The instance of JavaMailSenderImpl.
      */
-    @Bean
-    public JavaMailSender getJavaMailSender() {
-    	
-    	/**
-    	 * The instance of JavaMailSenderImpl.
-    	 */
-        JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
-        
-        /**
-         * The SMTP server host.
-         */
-        mailSender.setHost("sandbox.smtp.mailtrap.io");
-        
-        /**
-         * The SMTP server port.
-         */
-        mailSender.setPort(2525);
+    JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
 
-        /**
-         * The username for SMTP authentication.
-         */
-        mailSender.setUsername("851798ac859e68");
-        
-        /**
-         * The password for SMTP authentication.
-         */
-        mailSender.setPassword("8dca44c26b0fda");
+    /**
+     * The SMTP server host.
+     */
+    mailSender.setHost("sandbox.smtp.mailtrap.io");
 
-        /**
-         * Additional properties configuration.
-         */
-        Properties props = mailSender.getJavaMailProperties();
-        props.put("mail.transport.protocol", "smtp");
-        props.put("mail.smtp.auth", "true");
-        props.put("mail.smtp.starttls.enable", "true");
-        props.put("mail.debug", "true");
+    /**
+     * The SMTP server port.
+     */
+    mailSender.setPort(2525);
 
-        return mailSender;
-    }
+    /**
+     * The username for SMTP authentication.
+     */
+    mailSender.setUsername("851798ac859e68");
+
+    /**
+     * The password for SMTP authentication.
+     */
+    mailSender.setPassword("8dca44c26b0fda");
+
+    /**
+     * Additional properties configuration.
+     */
+    Properties props = mailSender.getJavaMailProperties();
+    props.put("mail.transport.protocol", "smtp");
+    props.put("mail.smtp.auth", "true");
+    props.put("mail.smtp.starttls.enable", "true");
+    props.put("mail.debug", "true");
+
+    return mailSender;
+  }
 }
