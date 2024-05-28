@@ -5,9 +5,9 @@
       <img src="assets/logo.png" alt="Application logo">
     </div>
     <div class="login-form">
-      <h2>Login</h2>
+      <h2 class="login-title">Login</h2>
       <form (formGroup)="loginForm" (ngSubmit)="login()">
-        <label for="username">Username:</label>
+        <label for="username">Email:</label>
         <input type="text" id="username" formControlName="username" required>
         <label for="password">Password:</label>
         <input type="password" id="password" formControlName="password" required>

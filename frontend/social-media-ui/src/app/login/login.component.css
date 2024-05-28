@@ -1,5 +1,4 @@
 .container {
-  /*background-color: #C2D9FF;*/
   height: 100%;
   background-image: url("/assets/background_login.png");
   background-position: center;
@@ -33,6 +32,7 @@
 .login-container form label {
   margin-bottom: 10px;
   display: block; 
+  font-size: 1.2em;
 }
 
 .login-container form input {
@@ -41,6 +41,11 @@
   margin-bottom: 15px;
 }
 
+.login-title {
+  text-align: center; 
+  margin-left: 40px;
+  font-size: 25px;
+}
 .login-container form button {
   width: 100%;
   padding: 10px;
@@ -76,7 +81,7 @@
 
 .motto {
   font-family: "Lucida Handwriting", Roboto, "Helvetica Neue", Arial, sans-serif; 
-  font-size: 30px;
+  font-size: 35px;
   font-weight: bold; 
   color: #000000; 
   text-align: center; 
