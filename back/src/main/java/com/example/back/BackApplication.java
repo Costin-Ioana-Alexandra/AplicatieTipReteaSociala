@@ -13,12 +13,6 @@ import lombok.NoArgsConstructor;
 public class BackApplication {
 
   /**
-   * Private constructor to prevent instantiation as a utility class.
-   */
-  private BackApplication() {
-  }
-
-  /**
    * Represents the main method which serves as the entry point for the Spring
    * Boot application.
    *
