@@ -1,12 +1,13 @@
 package com.example.back.registration;
 
-import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import lombok.AllArgsConstructor;
 
 /**
  * Represents a class controller for handling user registration requests.
@@ -33,7 +34,7 @@ public class RegistrationController {
   }
 
   /**
-   * Confirms an user's registration with a token.
+   * Confirms a user's registration with a token.
    *
    * @param token the confirmation token
    * @return a response message from the registration service

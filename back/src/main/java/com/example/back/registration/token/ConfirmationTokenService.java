@@ -1,10 +1,11 @@
 package com.example.back.registration.token;
 
-import lombok.AllArgsConstructor;
-import org.springframework.stereotype.Service;
-
 import java.time.LocalDateTime;
 import java.util.Optional;
+
+import org.springframework.stereotype.Service;
+
+import lombok.AllArgsConstructor;
 
 /**
  * Represents a class service for managing confirmation tokens.
@@ -46,6 +47,7 @@ public class ConfirmationTokenService {
    * @return The number of tokens updated.
    */
   public int setConfirmedAt(final String token) {
-    return confirmationTokenRepository.updateConfirmedAt(token, LocalDateTime.now());
+    return confirmationTokenRepository.updateConfirmedAt(token,
+        LocalDateTime.now());
   }
 }

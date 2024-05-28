@@ -33,14 +33,16 @@ public class AppUser implements UserDetails {
   /**
    * The identifier for the user.
    */
-  @SequenceGenerator(name = "student_sequence",
+  @SequenceGenerator(
+      name = "student_sequence",
       sequenceName = "student_sequence",
-      allocationSize = 1)
+      allocationSize = 1
+  )
   @Id
   @GeneratedValue(
       strategy = GenerationType.SEQUENCE,
       generator = "student_sequence"
-    )
+  )
   private Long id;
 
   /**
@@ -90,11 +92,8 @@ public class AppUser implements UserDetails {
    * @param password    the password of the user
    * @param appUserRole the role of the user
    */
-  public AppUser(
-      final String firstName,
-      final String lastName,
-      final String email,
-      final String password,
+  public AppUser(final String firstName, final String lastName,
+      final String email, final String password,
       final AppUserRole appUserRole) {
 
     this.firstName = firstName;
@@ -111,7 +110,8 @@ public class AppUser implements UserDetails {
    */
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
-    SimpleGrantedAuthority authority = new SimpleGrantedAuthority(appUserRole.name());
+    SimpleGrantedAuthority authority = new SimpleGrantedAuthority(
+        appUserRole.name());
     return Collections.singletonList(authority);
   }
 
@@ -160,8 +160,8 @@ public class AppUser implements UserDetails {
   /**
    * Indicates whether the user's credentials (password) have expired.
    *
-   * @return {@code true} if the user's credentials are non-expired, {@code false}
-   *         otherwise
+   * @return {@code true} if the user's credentials are non-expired,
+   *         {@code false} otherwise
    */
   @Override
   public boolean isCredentialsNonExpired() {

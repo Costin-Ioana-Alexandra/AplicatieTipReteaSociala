@@ -1,12 +1,13 @@
 package com.example.back.security;
 
-import com.example.back.appuser.AppUser;
+import java.util.Collection;
+import java.util.Collections;
+
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Collection;
-import java.util.Collections;
+import com.example.back.appuser.AppUser;
 
 /**
  * Represents the class implementation of Spring Security UserDetails interface
@@ -35,7 +36,8 @@ public class CustomUserDetails implements UserDetails {
    */
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
-    return Collections.singleton(new SimpleGrantedAuthority(appUser.getAppUserRole().name()));
+    return Collections
+        .singleton(new SimpleGrantedAuthority(appUser.getAppUserRole().name()));
   }
 
   /**

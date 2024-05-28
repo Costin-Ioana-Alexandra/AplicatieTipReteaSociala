@@ -36,8 +36,11 @@ public class DataSourceConfig {
     String username = new String(Base64.getDecoder().decode(encodedUsername));
     String password = new String(Base64.getDecoder().decode(encodedPassword));
 
-    return DataSourceBuilder.create().url(env.getProperty("spring.datasource.url")).username(username)
+    return DataSourceBuilder.create()
+        .url(env.getProperty("spring.datasource.url")).username(username)
         .password(password)
-        .driverClassName(env.getProperty("spring.datasource.driver-class-name", "org.postgresql.Driver")).build();
+        .driverClassName(env.getProperty("spring.datasource.driver-class-name",
+            "org.postgresql.Driver"))
+        .build();
   }
 }

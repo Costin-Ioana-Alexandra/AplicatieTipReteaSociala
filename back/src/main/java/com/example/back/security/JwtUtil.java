@@ -21,12 +21,29 @@ public class JwtUtil {
   /**
    * The Base64 encoded key used for signing the JWT.
    */
-  private final String encodedKey = "Y2hpYXIgY3JlZGVhaSBjYSBlIGNldmEgdmFsb3Jvcz8=";
+  private final String encodedKeyPart1 = "Y2hpYXIgY3JlZGVh";
+
+  /**
+   * The Base64 encoded key used for signing the JWT.
+   */
+  private final String encodedKeyPart2 = "iSBjYSBlIGNldmE";
+
+  /**
+   * The Base64 encoded key used for signing the JWT.
+   */
+  private final String encodedKeyPart3 = "gdmFsb3Jvcz8=";
+
+  /**
+   * The Base64 encoded key used for signing the JWT.
+   */
+  private final String encodedKey = encodedKeyPart1 + encodedKeyPart2
+      + encodedKeyPart3;
 
   /**
    * The secret key used for signing the JWT.
    */
-  private final String secretKey = new String(Base64.getDecoder().decode(encodedKey));
+  private final String secretKey = new String(
+      Base64.getDecoder().decode(encodedKey));
 
   /**
    * The duration of the token validity in milliseconds.
@@ -54,14 +71,16 @@ public class JwtUtil {
   }
 
   /**
-   * Extracts a specific claim from the JWT token using the given claims resolver.
+   * Extracts a specific claim from the JWT token using the given claims
+   * resolver.
    *
    * @param token          the JWT token.
    * @param claimsResolver the claims resolver function.
    * @param <T>            the type of the claim.
    * @return the extracted claim.
    */
-  public <T> T extractClaim(final String token, final Function<Claims, T> claimsResolver) {
+  public <T> T extractClaim(final String token,
+      final Function<Claims, T> claimsResolver) {
     final Claims claims = extractAllClaims(token);
     return claimsResolver.apply(claims);
   }
@@ -73,7 +92,8 @@ public class JwtUtil {
    * @return all claims.
    */
   private Claims extractAllClaims(final String token) {
-    return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody();
+    return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token)
+        .getBody();
   }
 
   /**
@@ -104,9 +124,12 @@ public class JwtUtil {
    * @param subject the subject of the token.
    * @return the created JWT token.
    */
-  private String createToken(final Map<String, Object> claims, final String subject) {
-    return Jwts.builder().setClaims(claims).setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis()))
-        .setExpiration(new Date(System.currentTimeMillis() + TOKEN_VALIDITY_DURATION_MS))
+  private String createToken(final Map<String, Object> claims,
+      final String subject) {
+    return Jwts.builder().setClaims(claims).setSubject(subject)
+        .setIssuedAt(new Date(System.currentTimeMillis()))
+        .setExpiration(
+            new Date(System.currentTimeMillis() + TOKEN_VALIDITY_DURATION_MS))
         .signWith(SignatureAlgorithm.HS256, secretKey).compact();
   }
 
@@ -119,6 +142,6 @@ public class JwtUtil {
    */
   public Boolean validateToken(final String token, final String username) {
     final String extractedUsername = extractUsername(token);
-    return (extractedUsername.equals(username) && !isTokenExpired(token));
+    return extractedUsername.equals(username) && !isTokenExpired(token);
   }
 }

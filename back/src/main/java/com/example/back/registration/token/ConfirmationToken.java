@@ -28,9 +28,16 @@ public class ConfirmationToken {
   /**
    * Generates sequence numbers for the confirmation tokens.
    */
-  @SequenceGenerator(name = "confirmation_token_sequence", sequenceName = "confirmation_token_sequence", allocationSize = 1)
+  @SequenceGenerator(
+      name = "confirmation_token_sequence",
+      sequenceName = "confirmation_token_sequence",
+      allocationSize = 1
+  )
   @Id
-  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "confirmation_token_sequence")
+  @GeneratedValue(
+      strategy = GenerationType.SEQUENCE,
+      generator = "confirmation_token_sequence"
+  )
   private Long id;
 
   /**
@@ -71,8 +78,8 @@ public class ConfirmationToken {
    * @param expiresAt The date and time when the token expires.
    * @param appUser   The user associated with the token.
    */
-  public ConfirmationToken(final String token, final LocalDateTime createdAt, final LocalDateTime expiresAt,
-      final AppUser appUser) {
+  public ConfirmationToken(final String token, final LocalDateTime createdAt,
+      final LocalDateTime expiresAt, final AppUser appUser) {
     this.token = token;
     this.createdAt = createdAt;
     this.expiresAt = expiresAt;

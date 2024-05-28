@@ -15,7 +15,28 @@ public class EmailValidator implements Predicate<String> {
   /**
    * Regular expression for validating email addresses.
    */
-  private static final String EMAIL_REGEX = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
+  private static final String EMAIL_REGEX_PART1 = "^[a-zA-Z0-9_+&*-]+";
+
+  /**
+   * Regular expression for validating email addresses.
+   */
+  private static final String EMAIL_REGEX_PART2 = "(?:\\.[a-zA-Z0-9_+&*-]+)*";
+
+  /**
+   * Regular expression for validating email addresses.
+   */
+  private static final String EMAIL_REGEX_PART3 = "@(?:[a-zA-Z0-9-]+\\.)+";
+
+  /**
+   * Regular expression for validating email addresses.
+   */
+  private static final String EMAIL_REGEX_PART4 = "[a-zA-Z]{2,7}$";
+
+  /**
+   * Regular expression for validating email addresses.
+   */
+  private static final String EMAIL_REGEX = EMAIL_REGEX_PART1
+      + EMAIL_REGEX_PART2 + EMAIL_REGEX_PART3 + EMAIL_REGEX_PART4;
 
   /**
    * Pattern for the regular expression.
