@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MessageService } from './message.service';
-import { Message } from './message.model'; 
+import { Message } from './message.model';
 import { FormsModule } from '@angular/forms';
 import { FileService } from './file.service';
 import { HttpClientModule } from '@angular/common/http';
@@ -15,7 +15,7 @@ import { RouterModule } from '@angular/router';
   styleUrl: './messages.component.css',
 })
 export class MessagesComponent {
-  newMessageContent: string = ''; 
+  newMessageContent: string = '';
 
   constructor(
     public messageService: MessageService,
@@ -29,7 +29,7 @@ export class MessagesComponent {
   loadMessagesFromFile() {
     this.fileService.loadMessagesFromFile('assets/mesaje.txt').subscribe(
       data => {
-        const messages = data.split('\n'); 
+        const messages = data.split('\n');
         messages.forEach(message => {
           if (message.trim() !== '') {
             this.messageService.currentUserMessages.push(new Message(message, 'current'));
@@ -44,15 +44,25 @@ export class MessagesComponent {
 
   sendMessage() {
     if (this.newMessageContent.trim() !== '') {
-      const newMessage = new Message(this.newMessageContent, 'current'); 
-      this.messageService.currentUserMessages.push(newMessage); 
-      this.newMessageContent = ''; 
+
+      if(this.newMessageContent === ':)') {
+        this.newMessageContent = '😀';
+      }
+      else if(this.newMessageContent === ':(') {
+        this.newMessageContent = '☹️';
+      }
+      else if(this.newMessageContent === '<3') {
+        this.newMessageContent = '🤍';
+      }
+
+      const newMessage = new Message(this.newMessageContent, 'current');
+      this.messageService.currentUserMessages.push(newMessage);
+      this.newMessageContent = '';
     }
   }
-  
-  username: string = "username";
+
 
   generateWelcomeMessage(): string {
-    return `Welcome back, ${this.username}!`;
+    return `Space Chat!`;
     }
 }
