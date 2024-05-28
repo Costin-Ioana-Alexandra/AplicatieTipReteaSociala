@@ -1,10 +1,10 @@
 package com.example.back.registration;
 
-import org.springframework.stereotype.Component;
-
 import java.util.function.Predicate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import org.springframework.stereotype.Component;
 
 /**
  * Represents the class component for validating email addresses.
@@ -20,7 +20,7 @@ public class EmailValidator implements Predicate<String> {
   /**
    * Pattern for the regular expression.
    */
-  private static final Pattern pattern = Pattern.compile(EMAIL_REGEX);
+  private static final Pattern EMAIL_PATTERN = Pattern.compile(EMAIL_REGEX);
 
   /**
    * Tests if the given string is a valid email address.
@@ -29,7 +29,7 @@ public class EmailValidator implements Predicate<String> {
    */
   @Override
   public boolean test(final String s) {
-    Matcher matcher = pattern.matcher(s);
+    Matcher matcher = EMAIL_PATTERN.matcher(s);
     return matcher.matches();
   }
 }

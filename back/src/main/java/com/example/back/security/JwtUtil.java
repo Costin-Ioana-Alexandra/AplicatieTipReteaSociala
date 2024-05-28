@@ -21,12 +21,12 @@ public class JwtUtil {
   /**
    * The Base64 encoded key used for signing the JWT.
    */
-  private final String ENCODED_KEY = "Y2hpYXIgY3JlZGVhaSBjYSBlIGNldmEgdmFsb3Jvcz8=";
+  private final String encodedKey = "Y2hpYXIgY3JlZGVhaSBjYSBlIGNldmEgdmFsb3Jvcz8=";
 
   /**
    * The secret key used for signing the JWT.
    */
-  private final String SECRET_KEY = new String(Base64.getDecoder().decode(ENCODED_KEY));
+  private final String secretKey = new String(Base64.getDecoder().decode(encodedKey));
 
   /**
    * The duration of the token validity in milliseconds.
@@ -73,7 +73,7 @@ public class JwtUtil {
    * @return all claims.
    */
   private Claims extractAllClaims(final String token) {
-    return Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token).getBody();
+    return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody();
   }
 
   /**
@@ -107,7 +107,7 @@ public class JwtUtil {
   private String createToken(final Map<String, Object> claims, final String subject) {
     return Jwts.builder().setClaims(claims).setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis()))
         .setExpiration(new Date(System.currentTimeMillis() + TOKEN_VALIDITY_DURATION_MS))
-        .signWith(SignatureAlgorithm.HS256, SECRET_KEY).compact();
+        .signWith(SignatureAlgorithm.HS256, secretKey).compact();
   }
 
   /**

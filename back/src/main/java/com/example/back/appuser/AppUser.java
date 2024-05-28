@@ -33,9 +33,14 @@ public class AppUser implements UserDetails {
   /**
    * The identifier for the user.
    */
-  @SequenceGenerator(name = "student_sequence", sequenceName = "student_sequence", allocationSize = 1)
+  @SequenceGenerator(name = "student_sequence",
+      sequenceName = "student_sequence",
+      allocationSize = 1)
   @Id
-  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "student_sequence")
+  @GeneratedValue(
+      strategy = GenerationType.SEQUENCE,
+      generator = "student_sequence"
+    )
   private Long id;
 
   /**
@@ -85,8 +90,13 @@ public class AppUser implements UserDetails {
    * @param password    the password of the user
    * @param appUserRole the role of the user
    */
-  public AppUser(final String firstName, final String lastName, final String email, final String password,
+  public AppUser(
+      final String firstName,
+      final String lastName,
+      final String email,
+      final String password,
       final AppUserRole appUserRole) {
+
     this.firstName = firstName;
     this.lastName = lastName;
     this.email = email;

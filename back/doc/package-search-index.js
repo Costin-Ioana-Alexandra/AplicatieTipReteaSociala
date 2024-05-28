@@ -1,1 +1,1 @@
-packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"com.example.back.security"}];updateSearchResults();
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"com.example.back.appuser"},{"l":"com.example.back.email"},{"l":"com.example.back.registration"},{"l":"com.example.back.registration.token"},{"l":"com.example.back.security"},{"l":"com.example.back.security.config"}];updateSearchResults();
