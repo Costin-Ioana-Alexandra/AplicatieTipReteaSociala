@@ -1,24 +1,23 @@
-<!-- src/app/login/login.component.html -->
 <div class="container">
   <h1 class="motto">Connect and explore the intergalactic social world with SpaceChat!</h1>
   <div class="login-container">
     <div class="logo-container">
-      <img src="assets/logo.png" alt="Logo-ul aplicatiei">
+      <img src="assets/logo.png" alt="Application logo">
     </div>
     <div class="login-form">
       <h2>Login</h2>
-      <form (ngSubmit)="login()">
+      <form (formGroup)="loginForm" (ngSubmit)="login()">
         <label for="username">Username:</label>
-        <input type="text" id="username" name="username" required [(ngModel)]="loginRequest.username" >
+        <input type="text" id="username" formControlName="username" required>
         <label for="password">Password:</label>
-        <input type="password" id="password" name="password" [(ngModel)]="loginRequest.password" required>
-        <button type="submit">Log in</button>
+        <input type="password" id="password" formControlName="password" required>
+        <button type="submit" (click)="this.login()" >Log in</button>
         <div class="reset-link">
-          <p><a routerLink="/reset-password">Forgot password?</a></p>
+          <p><a (click)="goToSettings()">Forgot password?</a></p>
         </div>
       </form>
       <div class="signup-link">
-        <p>Don't have an account? <a routerLink="/sign-up">Sign up</a></p>
+        <p>Don't have an account? <a (click)="goToSign()">Sign up</a></p>
       </div>
     </div>
   </div>
