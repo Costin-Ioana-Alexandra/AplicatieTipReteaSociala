@@ -5,8 +5,7 @@ import { SignUpComponent } from './signup/signup.component';
 import { ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
-
-
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-root',

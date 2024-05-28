@@ -1,13 +1,10 @@
-// src/app/app.module.ts
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { FormsModule } from '@angular/forms'; // Import FormsModule
-import { HttpClientModule } from '@angular/common/http';
-
+import { FormsModule, ReactiveFormsModule } from '@angular/forms'; // Import ReactiveFormsModule
+import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
-import { AuthService } from './services/auth.service';
-import { AppRoutingModule } from './app-routing.module'; // Import the routing module
+import { HttpClientModule } from '@angular/common/http';
 
 
 @NgModule({
@@ -17,11 +14,13 @@ import { AppRoutingModule } from './app-routing.module'; // Import the routing m
   ],
   imports: [
     BrowserModule,
-    FormsModule, // Add FormsModule to imports array
-    HttpClientModule,
-    AppRoutingModule // Import the routing module
+    AppRoutingModule,
+    ReactiveFormsModule,
+    FormsModule,
+
+    HttpClientModule
   ],
-  providers: [AuthService],
+  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
