@@ -1,8 +1,9 @@
 package com.example.back;
 
-import lombok.NoArgsConstructor;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+import lombok.NoArgsConstructor;
 
 /**
  * Represents the main class for the Spring Boot application.
@@ -10,6 +11,12 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @NoArgsConstructor
 @SpringBootApplication
 public class BackApplication {
+
+  /**
+   * Private constructor to prevent instantiation as a utility class.
+   */
+  private BackApplication() {
+  }
 
   /**
    * Represents the main method which serves as the entry point for the Spring
