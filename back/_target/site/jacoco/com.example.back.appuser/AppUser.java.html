@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AppUser.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">back</a> &gt; <a href="index.source.html" class="el_package">com.example.back.appuser</a> &gt; <span class="el_source">AppUser.java</span></div><h1>AppUser.java</h1><pre class="source lang-java linenums">package com.example.back.appuser;
+
+import java.util.Collection;
+import java.util.Collections;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.SequenceGenerator;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+/**
+ * Represents the data of an user who connects to a social media app.
+ */
+@SuppressWarnings(&quot;serial&quot;)
+@Getter
+<span class="pc" id="L27">@Setter</span>
+<span class="pc bpc" id="L28" title="69 of 70 branches missed.">@EqualsAndHashCode</span>
+<span class="nc" id="L29">@NoArgsConstructor</span>
+@Entity
+public class AppUser implements UserDetails {
+
+  /**
+   * The identifier for the user.
+   */
+  @SequenceGenerator(
+      name = &quot;student_sequence&quot;,
+      sequenceName = &quot;student_sequence&quot;,
+      allocationSize = 1
+  )
+  @Id
+  @GeneratedValue(
+      strategy = GenerationType.SEQUENCE,
+      generator = &quot;student_sequence&quot;
+  )
+<span class="nc" id="L46">  private Long id;</span>
+
+  /**
+   * The first name of the user.
+   */
+<span class="fc" id="L51">  @Getter</span>
+  private String firstName;
+
+  /**
+   * The last name of the user.
+   */
+<span class="fc" id="L57">  @Getter</span>
+  private String lastName;
+
+  /**
+   * The email of the user.
+   */
+<span class="nc" id="L63">  private String email;</span>
+
+  /**
+   * The password of the user.
+   */
+  private String password;
+
+  /**
+   * The role of the user in the application.
+   */
+  @Enumerated(EnumType.STRING)
+<span class="fc" id="L74">  private AppUserRole appUserRole;</span>
+
+  /**
+   * Indicates whether the user's account is locked.
+   */
+<span class="pc" id="L79">  private Boolean locked = false;</span>
+
+  /**
+   * Indicates whether the user's account is enabled.
+   */
+<span class="pc" id="L84">  private Boolean enabled = false;</span>
+
+  /**
+   * Constructs a new AppUser (user) with the specified details.
+   *
+   * @param firstName   the first name of the user
+   * @param lastName    the last name of the user
+   * @param email       the email of the user
+   * @param password    the password of the user
+   * @param appUserRole the role of the user
+   */
+  public AppUser(final String firstName, final String lastName,
+      final String email, final String password,
+<span class="fc" id="L97">      final AppUserRole appUserRole) {</span>
+
+<span class="fc" id="L99">    this.firstName = firstName;</span>
+<span class="fc" id="L100">    this.lastName = lastName;</span>
+<span class="fc" id="L101">    this.email = email;</span>
+<span class="fc" id="L102">    this.password = password;</span>
+<span class="fc" id="L103">    this.appUserRole = appUserRole;</span>
+<span class="fc" id="L104">  }</span>
+
+  /**
+   * Returns the authorities granted to the user.
+   *
+   * @return a collection of authorities granted to the user
+   */
+  @Override
+  public Collection&lt;? extends GrantedAuthority&gt; getAuthorities() {
+<span class="fc" id="L113">    SimpleGrantedAuthority authority = new SimpleGrantedAuthority(</span>
+<span class="fc" id="L114">        appUserRole.name());</span>
+<span class="fc" id="L115">    return Collections.singletonList(authority);</span>
+  }
+
+  /**
+   * Returns the password used by the user to authenticate.
+   *
+   * @return the user's password
+   */
+  @Override
+  public String getPassword() {
+<span class="fc" id="L125">    return password;</span>
+  }
+
+  /**
+   * Returns the email used by the user to authenticate.
+   *
+   * @return the user's email
+   */
+  @Override
+  public String getUsername() {
+<span class="fc" id="L135">    return email;</span>
+  }
+
+  /**
+   * Indicates whether the user's account has expired.
+   *
+   * @return {@code true} if the user's account is non-expired, {@code false}
+   *         otherwise
+   */
+  @Override
+  public boolean isAccountNonExpired() {
+<span class="fc" id="L146">    return true;</span>
+  }
+
+  /**
+   * Indicates whether the user is locked or unlocked.
+   *
+   * @return {@code true} if the user's account is non-locked, {@code false}
+   *         otherwise
+   */
+  @Override
+  public boolean isAccountNonLocked() {
+<span class="fc bfc" id="L157" title="All 2 branches covered.">    return !locked;</span>
+  }
+
+  /**
+   * Indicates whether the user's credentials (password) have expired.
+   *
+   * @return {@code true} if the user's credentials are non-expired,
+   *         {@code false} otherwise
+   */
+  @Override
+  public boolean isCredentialsNonExpired() {
+<span class="fc" id="L168">    return true;</span>
+  }
+
+  /**
+   * Indicates whether the user is enabled or disabled.
+   *
+   * @return {@code true} if the user is enabled, {@code false} otherwise
+   */
+  @Override
+  public boolean isEnabled() {
+<span class="fc" id="L178">    return enabled;</span>
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

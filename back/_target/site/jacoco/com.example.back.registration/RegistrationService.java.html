@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>RegistrationService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">back</a> &gt; <a href="index.source.html" class="el_package">com.example.back.registration</a> &gt; <span class="el_source">RegistrationService.java</span></div><h1>RegistrationService.java</h1><pre class="source lang-java linenums">package com.example.back.registration;
+
+import java.time.LocalDateTime;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.example.back.appuser.AppUser;
+import com.example.back.appuser.AppUserRole;
+import com.example.back.appuser.AppUserService;
+import com.example.back.email.EmailSender;
+import com.example.back.registration.token.ConfirmationToken;
+import com.example.back.registration.token.ConfirmationTokenService;
+
+import lombok.AllArgsConstructor;
+
+/**
+ * Service for handling user registration and email confirmation.
+ */
+@Service
+<span class="fc" id="L21">@AllArgsConstructor</span>
+public class RegistrationService {
+
+  /**
+   * Service for managing application users.
+   */
+  private final AppUserService appUserService;
+
+  /**
+   * Validator for checking the validity of email addresses.
+   */
+  private final EmailValidator emailValidator;
+
+  /**
+   * Service for managing confirmation tokens.
+   */
+  private final ConfirmationTokenService confirmationTokenService;
+
+  /**
+   * Service for sending emails.
+   */
+  private final EmailSender emailSender;
+
+  /**
+   * Registers a new user and sends a confirmation email.
+   *
+   * @param request the registration request containing user details
+   * @return the confirmation token
+   */
+  public String register(final RegistrationRequest request) {
+<span class="fc" id="L51">    boolean isValidEmail = emailValidator.test(request.getEmail());</span>
+
+<span class="pc bpc" id="L53" title="1 of 2 branches missed.">    if (!isValidEmail) {</span>
+<span class="nc" id="L54">      throw new IllegalStateException(&quot;email not valid&quot;);</span>
+    }
+
+<span class="fc" id="L57">    String token = appUserService</span>
+<span class="fc" id="L58">        .signUpUser(new AppUser(request.getFirstName(), request.getLastName(),</span>
+<span class="fc" id="L59">            request.getEmail(), request.getPassword(), AppUserRole.USER));</span>
+
+<span class="fc" id="L61">    String link = &quot;http://localhost:8080/api/v1/registration/confirm?token=&quot;</span>
+        + token;
+<span class="fc" id="L63">    emailSender.send(request.getEmail(),</span>
+<span class="fc" id="L64">        buildEmail(request.getFirstName(), link));</span>
+
+<span class="fc" id="L66">    return token;</span>
+  }
+
+  /**
+   * Confirms the user's account using the provided token.
+   *
+   * @param token the confirmation token
+   * @return a success message
+   */
+  @Transactional
+  public String confirmToken(final String token) {
+<span class="nc" id="L77">    ConfirmationToken confirmationToken = confirmationTokenService</span>
+<span class="nc" id="L78">        .getToken(token)</span>
+<span class="nc" id="L79">        .orElseThrow(() -&gt; new IllegalStateException(&quot;token not found&quot;));</span>
+
+//        if (confirmationToken.getConfirmedAt() != null) {
+//            throw new IllegalStateException(&quot;email already confirmed&quot;);
+//        }
+
+<span class="nc" id="L85">    LocalDateTime expiredAt = confirmationToken.getExpiresAt();</span>
+
+<span class="nc bnc" id="L87" title="All 2 branches missed.">    if (expiredAt.isBefore(LocalDateTime.now())) {</span>
+<span class="nc" id="L88">      throw new IllegalStateException(&quot;token expired&quot;);</span>
+    }
+
+<span class="nc" id="L91">    confirmationTokenService.setConfirmedAt(token);</span>
+<span class="nc" id="L92">    appUserService.enableAppUser(confirmationToken.getAppUser().getEmail());</span>
+
+<span class="nc" id="L94">    return &quot;&lt;div style=\&quot;font-family:Helvetica,Arial,sans-serif;font-size:16px;margin:0;color:#0b0c0c\&quot;&gt;\n&quot;</span>
+        + &quot;\n&quot;
+        + &quot;&lt;span style=\&quot;display:none;font-size:1px;color:#fff;max-height:0\&quot;&gt;&lt;/span&gt;\n&quot;
+        + &quot;\n&quot;
+        + &quot;  &lt;table role=\&quot;presentation\&quot; width=\&quot;100%\&quot; style=\&quot;border-collapse:collapse;&quot;
+        + &quot;min-width:100%;width:100%!important\&quot; cellpadding=\&quot;0\&quot; cellspacing=\&quot;0\&quot; border=\&quot;0\&quot;&gt;\n&quot;
+        + &quot;    &lt;tbody&gt;&lt;tr&gt;\n&quot;
+        + &quot;      &lt;td width=\&quot;100%\&quot; height=\&quot;53\&quot; bgcolor=\&quot;#0b0c0c\&quot;&gt;\n&quot;
+        + &quot;        \n&quot;
+        + &quot;        &lt;table role=\&quot;presentation\&quot; width=\&quot;100%\&quot; style=\&quot;border-collapse:collapse;max-width:580px\&quot; cellpadding=\&quot;0\&quot; cellspacing=\&quot;0\&quot; border=\&quot;0\&quot; align=\&quot;center\&quot;&gt;\n&quot;
+        + &quot;          &lt;tbody&gt;&lt;tr&gt;\n&quot;
+        + &quot;            &lt;td width=\&quot;70\&quot; bgcolor=\&quot;#0b0c0c\&quot; valign=\&quot;middle\&quot;&gt;\n&quot;
+        + &quot;                &lt;table role=\&quot;presentation\&quot; cellpadding=\&quot;0\&quot; cellspacing=\&quot;0\&quot; border=\&quot;0\&quot; style=\&quot;border-collapse:collapse\&quot;&gt;\n&quot;
+        + &quot;                  &lt;tbody&gt;&lt;tr&gt;\n&quot;
+        + &quot;                    &lt;td style=\&quot;padding-left:10px\&quot;&gt;\n&quot;
+        + &quot;                  \n&quot; + &quot;                    &lt;/td&gt;\n&quot;
+        + &quot;                    &lt;td style=\&quot;font-size:28px;line-height:1.315789474;Margin-top:4px;padding-left:10px\&quot;&gt;\n&quot;
+        + &quot;                      &lt;span style=\&quot;font-family:Helvetica,Arial,sans-serif;font-weight:700;color:#ffffff;text-decoration:none;vertical-align:top;display:inline-block\&quot;&gt;Congratulations, you have confirmed your account!&lt;/span&gt;\n&quot;
+        + &quot;                    &lt;/td&gt;\n&quot; + &quot;                  &lt;/tr&gt;\n&quot;
+        + &quot;                &lt;/tbody&gt;&lt;/table&gt;\n&quot; + &quot;              &lt;/a&gt;\n&quot;
+        + &quot;            &lt;/td&gt;\n&quot; + &quot;          &lt;/tr&gt;\n&quot;
+        + &quot;        &lt;/tbody&gt;&lt;/table&gt;\n&quot; + &quot;        \n&quot; + &quot;      &lt;/td&gt;\n&quot;
+        + &quot;    &lt;/tr&gt;\n&quot; + &quot;  &lt;/tbody&gt;&lt;/table&gt;\n&quot;
+        + &quot;  &lt;table role=\&quot;presentation\&quot; class=\&quot;m_-6186904992287805515content\&quot; align=\&quot;center\&quot; cellpadding=\&quot;0\&quot; cellspacing=\&quot;0\&quot; border=\&quot;0\&quot; style=\&quot;border-collapse:collapse;max-width:580px;width:100%!important\&quot; width=\&quot;100%\&quot;&gt;\n&quot;
+        + &quot;    &lt;tbody&gt;&lt;tr&gt;\n&quot;
+        + &quot;      &lt;td width=\&quot;10\&quot; height=\&quot;10\&quot; valign=\&quot;middle\&quot;&gt;&lt;/td&gt;\n&quot;
+        + &quot;      &lt;td&gt;\n&quot; + &quot;        \n&quot;
+        + &quot;                &lt;table role=\&quot;presentation\&quot; width=\&quot;100%\&quot; cellpadding=\&quot;0\&quot; cellspacing=\&quot;0\&quot; border=\&quot;0\&quot; style=\&quot;border-collapse:collapse\&quot;&gt;\n&quot;
+        + &quot;                  &lt;tbody&gt;&lt;tr&gt;\n&quot;
+        + &quot;                    &lt;td bgcolor=\&quot;#1D70B8\&quot; width=\&quot;100%\&quot; height=\&quot;10\&quot;&gt;&lt;/td&gt;\n&quot;
+        + &quot;                  &lt;/tr&gt;\n&quot; + &quot;                &lt;/tbody&gt;&lt;/table&gt;\n&quot;
+        + &quot;        \n&quot; + &quot;      &lt;/td&gt;\n&quot;
+        + &quot;      &lt;td width=\&quot;10\&quot; valign=\&quot;middle\&quot; height=\&quot;10\&quot;&gt;&lt;/td&gt;\n&quot;
+        + &quot;    &lt;/tr&gt;\n&quot; + &quot;  &lt;/tbody&gt;&lt;/table&gt;\n&quot; + &quot;\n&quot; + &quot;\n&quot; + &quot;\n&quot;
+        + &quot;  &lt;table role=\&quot;presentation\&quot; class=\&quot;m_-6186904992287805515content\&quot; align=\&quot;center\&quot; cellpadding=\&quot;0\&quot; cellspacing=\&quot;0\&quot; border=\&quot;0\&quot; style=\&quot;border-collapse:collapse;max-width:580px;width:100%!important\&quot; width=\&quot;100%\&quot;&gt;\n&quot;
+        + &quot;    &lt;tbody&gt;&lt;tr&gt;\n&quot; + &quot;      &lt;td height=\&quot;30\&quot;&gt;&lt;br&gt;&lt;/td&gt;\n&quot;
+        + &quot;    &lt;/tr&gt;\n&quot; + &quot;    &lt;tr&gt;\n&quot;
+        + &quot;      &lt;td width=\&quot;10\&quot; valign=\&quot;middle\&quot;&gt;&lt;br&gt;&lt;/td&gt;\n&quot;
+        + &quot;      &lt;td style=\&quot;font-family:Helvetica,Arial,sans-serif;font-size:19px;line-height:1.315789474;max-width:560px\&quot;&gt;\n&quot;
+        + &quot;        \n&quot;
+        + &quot;            &lt;p style=\&quot;Margin:0 0 20px 0;font-size:19px;line-height:25px;color:#0b0c0c\&quot;&gt;Good work! &lt;/p&gt;&lt;p style=\&quot;Margin:0 0 20px 0;font-size:19px;line-height:25px;color:#0b0c0c\&quot;&gt; Thank you for registering. You are the best! \n &lt;p&gt;You are officially a member of the PIP Project application&lt;/p&gt; &lt;p&gt;See you soon!&lt;/p&gt;&quot;
+        + &quot;        \n&quot; + &quot;      &lt;/td&gt;\n&quot;
+        + &quot;      &lt;td width=\&quot;10\&quot; valign=\&quot;middle\&quot;&gt;&lt;br&gt;&lt;/td&gt;\n&quot; + &quot;    &lt;/tr&gt;\n&quot;
+        + &quot;    &lt;tr&gt;\n&quot; + &quot;      &lt;td height=\&quot;30\&quot;&gt;&lt;br&gt;&lt;/td&gt;\n&quot; + &quot;    &lt;/tr&gt;\n&quot;
+        + &quot;  &lt;/tbody&gt;&lt;/table&gt;&lt;div class=\&quot;yj6qo\&quot;&gt;&lt;/div&gt;&lt;div class=\&quot;adL\&quot;&gt;\n&quot;
+        + &quot;\n&quot; + &quot;&lt;/div&gt;&lt;/div&gt;&quot;;
+  }
+
+  /**
+   * Builds the email content for the confirmation email.
+   *
+   * @param name the name of the user
+   * @param link the confirmation link
+   * @return the email content as a string
+   */
+  private String buildEmail(final String name, final String link) {
+<span class="fc" id="L150">    return &quot;&lt;div style=\&quot;font-family:Helvetica,Arial,sans-serif;font-size:16px;margin:0;color:#0b0c0c\&quot;&gt;\n&quot;</span>
+        + &quot;\n&quot;
+        + &quot;&lt;span style=\&quot;display:none;font-size:1px;color:#fff;max-height:0\&quot;&gt;&lt;/span&gt;\n&quot;
+        + &quot;\n&quot;
+        + &quot;  &lt;table role=\&quot;presentation\&quot; width=\&quot;100%\&quot; style=\&quot;border-collapse:collapse;min-width:100%;width:100%!important\&quot; cellpadding=\&quot;0\&quot; cellspacing=\&quot;0\&quot; border=\&quot;0\&quot;&gt;\n&quot;
+        + &quot;    &lt;tbody&gt;&lt;tr&gt;\n&quot;
+        + &quot;      &lt;td width=\&quot;100%\&quot; height=\&quot;53\&quot; bgcolor=\&quot;#0b0c0c\&quot;&gt;\n&quot;
+        + &quot;        \n&quot;
+        + &quot;        &lt;table role=\&quot;presentation\&quot; width=\&quot;100%\&quot; style=\&quot;border-collapse:collapse;max-width:580px\&quot; cellpadding=\&quot;0\&quot; cellspacing=\&quot;0\&quot; border=\&quot;0\&quot; align=\&quot;center\&quot;&gt;\n&quot;
+        + &quot;          &lt;tbody&gt;&lt;tr&gt;\n&quot;
+        + &quot;            &lt;td width=\&quot;70\&quot; bgcolor=\&quot;#0b0c0c\&quot; valign=\&quot;middle\&quot;&gt;\n&quot;
+        + &quot;                &lt;table role=\&quot;presentation\&quot; cellpadding=\&quot;0\&quot; cellspacing=\&quot;0\&quot; border=\&quot;0\&quot; style=\&quot;border-collapse:collapse\&quot;&gt;\n&quot;
+        + &quot;                  &lt;tbody&gt;&lt;tr&gt;\n&quot;
+        + &quot;                    &lt;td style=\&quot;padding-left:10px\&quot;&gt;\n&quot;
+        + &quot;                  \n&quot; + &quot;                    &lt;/td&gt;\n&quot;
+        + &quot;                    &lt;td style=\&quot;font-size:28px;line-height:1.315789474;Margin-top:4px;padding-left:10px\&quot;&gt;\n&quot;
+        + &quot;                      &lt;span style=\&quot;font-family:Helvetica,Arial,sans-serif;font-weight:700;color:#ffffff;text-decoration:none;vertical-align:top;display:inline-block\&quot;&gt;Confirm your email&lt;/span&gt;\n&quot;
+        + &quot;                    &lt;/td&gt;\n&quot; + &quot;                  &lt;/tr&gt;\n&quot;
+        + &quot;                &lt;/tbody&gt;&lt;/table&gt;\n&quot; + &quot;              &lt;/a&gt;\n&quot;
+        + &quot;            &lt;/td&gt;\n&quot; + &quot;          &lt;/tr&gt;\n&quot;
+        + &quot;        &lt;/tbody&gt;&lt;/table&gt;\n&quot; + &quot;        \n&quot; + &quot;      &lt;/td&gt;\n&quot;
+        + &quot;    &lt;/tr&gt;\n&quot; + &quot;  &lt;/tbody&gt;&lt;/table&gt;\n&quot;
+        + &quot;  &lt;table role=\&quot;presentation\&quot; class=\&quot;m_-6186904992287805515content\&quot; align=\&quot;center\&quot; cellpadding=\&quot;0\&quot; cellspacing=\&quot;0\&quot; border=\&quot;0\&quot; style=\&quot;border-collapse:collapse;max-width:580px;width:100%!important\&quot; width=\&quot;100%\&quot;&gt;\n&quot;
+        + &quot;    &lt;tbody&gt;&lt;tr&gt;\n&quot;
+        + &quot;      &lt;td width=\&quot;10\&quot; height=\&quot;10\&quot; valign=\&quot;middle\&quot;&gt;&lt;/td&gt;\n&quot;
+        + &quot;      &lt;td&gt;\n&quot; + &quot;        \n&quot;
+        + &quot;                &lt;table role=\&quot;presentation\&quot; width=\&quot;100%\&quot; cellpadding=\&quot;0\&quot; cellspacing=\&quot;0\&quot; border=\&quot;0\&quot; style=\&quot;border-collapse:collapse\&quot;&gt;\n&quot;
+        + &quot;                  &lt;tbody&gt;&lt;tr&gt;\n&quot;
+        + &quot;                    &lt;td bgcolor=\&quot;#1D70B8\&quot; width=\&quot;100%\&quot; height=\&quot;10\&quot;&gt;&lt;/td&gt;\n&quot;
+        + &quot;                  &lt;/tr&gt;\n&quot; + &quot;                &lt;/tbody&gt;&lt;/table&gt;\n&quot;
+        + &quot;        \n&quot; + &quot;      &lt;/td&gt;\n&quot;
+        + &quot;      &lt;td width=\&quot;10\&quot; valign=\&quot;middle\&quot; height=\&quot;10\&quot;&gt;&lt;/td&gt;\n&quot;
+        + &quot;    &lt;/tr&gt;\n&quot; + &quot;  &lt;/tbody&gt;&lt;/table&gt;\n&quot; + &quot;\n&quot; + &quot;\n&quot; + &quot;\n&quot;
+        + &quot;  &lt;table role=\&quot;presentation\&quot; class=\&quot;m_-6186904992287805515content\&quot; align=\&quot;center\&quot; cellpadding=\&quot;0\&quot; cellspacing=\&quot;0\&quot; border=\&quot;0\&quot; style=\&quot;border-collapse:collapse;max-width:580px;width:100%!important\&quot; width=\&quot;100%\&quot;&gt;\n&quot;
+        + &quot;    &lt;tbody&gt;&lt;tr&gt;\n&quot; + &quot;      &lt;td height=\&quot;30\&quot;&gt;&lt;br&gt;&lt;/td&gt;\n&quot;
+        + &quot;    &lt;/tr&gt;\n&quot; + &quot;    &lt;tr&gt;\n&quot;
+        + &quot;      &lt;td width=\&quot;10\&quot; valign=\&quot;middle\&quot;&gt;&lt;br&gt;&lt;/td&gt;\n&quot;
+        + &quot;      &lt;td style=\&quot;font-family:Helvetica,Arial,sans-serif;font-size:19px;line-height:1.315789474;max-width:560px\&quot;&gt;\n&quot;
+        + &quot;        \n&quot;
+        + &quot;            &lt;p style=\&quot;Margin:0 0 20px 0;font-size:19px;line-height:25px;color:#0b0c0c\&quot;&gt;Hi &quot;
+        + name
+        + &quot;,&lt;/p&gt;&lt;p style=\&quot;Margin:0 0 20px 0;font-size:19px;line-height:25px;color:#0b0c0c\&quot;&gt; Thank you for registering. Please click on the below link to activate your account: &lt;/p&gt;&lt;blockquote style=\&quot;Margin:0 0 20px 0;border-left:10px solid #b1b4b6;padding:15px 0 0.1px 15px;font-size:19px;line-height:25px\&quot;&gt;&lt;p style=\&quot;Margin:0 0 20px 0;font-size:19px;line-height:25px;color:#0b0c0c\&quot;&gt; &lt;a href=\&quot;&quot;
+        + link
+        + &quot;\&quot;&gt;Activate Now&lt;/a&gt; &lt;/p&gt;&lt;/blockquote&gt;\n Link will expire in 15 minutes. &lt;p&gt;See you soon&lt;/p&gt;&quot;
+        + &quot;        \n&quot; + &quot;      &lt;/td&gt;\n&quot;
+        + &quot;      &lt;td width=\&quot;10\&quot; valign=\&quot;middle\&quot;&gt;&lt;br&gt;&lt;/td&gt;\n&quot; + &quot;    &lt;/tr&gt;\n&quot;
+        + &quot;    &lt;tr&gt;\n&quot; + &quot;      &lt;td height=\&quot;30\&quot;&gt;&lt;br&gt;&lt;/td&gt;\n&quot; + &quot;    &lt;/tr&gt;\n&quot;
+        + &quot;  &lt;/tbody&gt;&lt;/table&gt;&lt;div class=\&quot;yj6qo\&quot;&gt;&lt;/div&gt;&lt;div class=\&quot;adL\&quot;&gt;\n&quot;
+        + &quot;\n&quot; + &quot;&lt;/div&gt;&lt;/div&gt;&quot;;
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

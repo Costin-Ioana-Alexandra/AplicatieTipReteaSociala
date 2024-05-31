@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CustomUserDetails.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">back</a> &gt; <a href="index.source.html" class="el_package">com.example.back.security</a> &gt; <span class="el_source">CustomUserDetails.java</span></div><h1>CustomUserDetails.java</h1><pre class="source lang-java linenums">package com.example.back.security;
+
+import java.util.Collection;
+import java.util.Collections;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import com.example.back.appuser.AppUser;
+
+/**
+ * Represents the class implementation of Spring Security UserDetails interface
+ * for representing user details.
+ */
+public class CustomUserDetails implements UserDetails {
+
+  /**
+   * The application user associated with the user details.
+   */
+  private final AppUser appUser;
+
+  /**
+   * Constructs CustomUserDetails with the given AppUser.
+   *
+   * @param appUser The application user associated with these user details.
+   */
+<span class="nc" id="L28">  public CustomUserDetails(final AppUser appUser) {</span>
+<span class="nc" id="L29">    this.appUser = appUser;</span>
+<span class="nc" id="L30">  }</span>
+
+  /**
+   * Retrieves the authorities granted to the user.
+   *
+   * @return The authorities granted to the user.
+   */
+  @Override
+  public Collection&lt;? extends GrantedAuthority&gt; getAuthorities() {
+<span class="nc" id="L39">    return Collections</span>
+<span class="nc" id="L40">        .singleton(new SimpleGrantedAuthority(appUser.getAppUserRole().name()));</span>
+  }
+
+  /**
+   * Retrieves the password used to authenticate the user.
+   *
+   * @return The password.
+   */
+  @Override
+  public String getPassword() {
+<span class="nc" id="L50">    return appUser.getPassword();</span>
+  }
+
+  /**
+   * Retrieves the email used to authenticate the user.
+   *
+   * @return The email.
+   */
+  @Override
+  public String getUsername() {
+<span class="nc" id="L60">    return appUser.getEmail();</span>
+  }
+
+  /**
+   * Indicates whether the user's account has expired.
+   *
+   * @return true if the user's account is valid, false otherwise.
+   */
+  @Override
+  public boolean isAccountNonExpired() {
+<span class="nc" id="L70">    return true;</span>
+  }
+
+  /**
+   * Indicates whether the user is locked or unlocked.
+   *
+   * @return true if the user is not locked, false otherwise.
+   */
+  @Override
+  public boolean isAccountNonLocked() {
+<span class="nc" id="L80">    return true;</span>
+  }
+
+  /**
+   * Indicates whether the user's credentials (password) has expired.
+   *
+   * @return true if the user's credentials are valid, false otherwise.
+   */
+  @Override
+  public boolean isCredentialsNonExpired() {
+<span class="nc" id="L90">    return true;</span>
+  }
+
+  /**
+   * Indicates whether the user is enabled or disabled.
+   *
+   * @return true if the user is enabled, false otherwise.
+   */
+  @Override
+  public boolean isEnabled() {
+<span class="nc" id="L100">    return appUser.isEnabled();</span>
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

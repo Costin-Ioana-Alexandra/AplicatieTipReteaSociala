@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>EmailService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">back</a> &gt; <a href="index.source.html" class="el_package">com.example.back.email</a> &gt; <span class="el_source">EmailService.java</span></div><h1>EmailService.java</h1><pre class="source lang-java linenums">package com.example.back.email;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.stereotype.Service;
+
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeMessage;
+import lombok.AllArgsConstructor;
+
+/**
+ * Represents a service class for sending emails.
+ */
+@Service
+<span class="fc" id="L18">@AllArgsConstructor</span>
+public class EmailService implements EmailSender {
+
+  /**
+   * Logger for logging email sending errors and information.
+   */
+<span class="fc" id="L24">  private static final Logger LOGGER = LoggerFactory</span>
+<span class="fc" id="L25">      .getLogger(EmailService.class);</span>
+
+  /**
+   * JavaMailSender for creating and sending emails.
+   */
+  private final JavaMailSender mailSender;
+
+  /**
+   * Sends an email to the specified recipient.
+   *
+   * @param receiver the recipient's email address
+   * @param email    the content of the email
+   */
+  @Override
+  @Async
+  public void send(final String receiver, final String email) {
+    try {
+<span class="fc" id="L42">      MimeMessage mimeMessage = mailSender.createMimeMessage();</span>
+<span class="fc" id="L43">      MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, &quot;utf-8&quot;);</span>
+
+<span class="fc" id="L45">      helper.setText(email, true);</span>
+<span class="fc" id="L46">      helper.setTo(receiver);</span>
+<span class="fc" id="L47">      helper.setSubject(&quot;Email Verification&quot;);</span>
+<span class="fc" id="L48">      helper.setFrom(&quot;staff.1301B@hotmail.com&quot;);</span>
+
+<span class="fc" id="L50">      mailSender.send(mimeMessage);</span>
+<span class="nc" id="L51">    } catch (MessagingException e) {</span>
+<span class="nc" id="L52">      LOGGER.error(&quot;Failed to send email&quot;, e);</span>
+<span class="nc" id="L53">      throw new IllegalStateException(&quot;Failed to send email&quot;);</span>
+<span class="fc" id="L54">    }</span>
+<span class="fc" id="L55">  }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

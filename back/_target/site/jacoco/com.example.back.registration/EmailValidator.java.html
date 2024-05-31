@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>EmailValidator.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">back</a> &gt; <a href="index.source.html" class="el_package">com.example.back.registration</a> &gt; <span class="el_source">EmailValidator.java</span></div><h1>EmailValidator.java</h1><pre class="source lang-java linenums">package com.example.back.registration;
+
+import java.util.function.Predicate;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import org.springframework.stereotype.Component;
+
+/**
+ * Represents the class component for validating email addresses.
+ */
+@Component
+<span class="fc" id="L13">public class EmailValidator implements Predicate&lt;String&gt; {</span>
+
+  /**
+   * Regular expression for validating email addresses.
+   */
+  private static final String EMAIL_REGEX_PART1 = &quot;^[a-zA-Z0-9_+&amp;*-]+&quot;;
+
+  /**
+   * Regular expression for validating email addresses.
+   */
+  private static final String EMAIL_REGEX_PART2 = &quot;(?:\\.[a-zA-Z0-9_+&amp;*-]+)*&quot;;
+
+  /**
+   * Regular expression for validating email addresses.
+   */
+  private static final String EMAIL_REGEX_PART3 = &quot;@(?:[a-zA-Z0-9-]+\\.)+&quot;;
+
+  /**
+   * Regular expression for validating email addresses.
+   */
+  private static final String EMAIL_REGEX_PART4 = &quot;[a-zA-Z]{2,7}$&quot;;
+
+  /**
+   * Regular expression for validating email addresses.
+   */
+  private static final String EMAIL_REGEX = EMAIL_REGEX_PART1
+      + EMAIL_REGEX_PART2 + EMAIL_REGEX_PART3 + EMAIL_REGEX_PART4;
+
+  /**
+   * Pattern for the regular expression.
+   */
+<span class="fc" id="L44">  private static final Pattern EMAIL_PATTERN = Pattern.compile(EMAIL_REGEX);</span>
+
+  /**
+   * Tests if the given string is a valid email address.
+   *
+   * @return true if the email address is valid, false otherwise
+   */
+  @Override
+  public boolean test(final String s) {
+<span class="fc" id="L53">    Matcher matcher = EMAIL_PATTERN.matcher(s);</span>
+<span class="fc" id="L54">    return matcher.matches();</span>
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

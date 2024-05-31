@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>WebSecurityConfig.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">back</a> &gt; <a href="index.source.html" class="el_package">com.example.back.security.config</a> &gt; <span class="el_source">WebSecurityConfig.java</span></div><h1>WebSecurityConfig.java</h1><pre class="source lang-java linenums">package com.example.back.security.config;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import com.example.back.appuser.AppUserService;
+import com.example.back.security.JwtRequestFilter;
+
+import lombok.RequiredArgsConstructor;
+
+/**
+ * Web security configuration for the application.
+ */
+@Configuration
+<span class="nc" id="L25">@RequiredArgsConstructor</span>
+@EnableWebSecurity
+public class WebSecurityConfig {
+
+  /**
+   * The service for managing application users.
+   */
+  private final AppUserService appUserService;
+
+  /**
+   * The password encoder for hashing passwords.
+   */
+  private final BCryptPasswordEncoder bCryptPasswordEncoder;
+
+  /**
+   * The JWT request filter for processing JWT authentication requests.
+   */
+  private final JwtRequestFilter jwtRequestFilter;
+
+  /**
+   * Configures the HTTP security filter chain.
+   *
+   * @param http The HttpSecurity object for configuration.
+   * @return A configured SecurityFilterChain object.
+   * @throws Exception Exception thrown in case of configuration error.
+   */
+  @Bean
+  public SecurityFilterChain securityFilterChain(final HttpSecurity http)
+      throws Exception {
+<span class="nc" id="L54">    http.csrf(csrf -&gt; csrf.disable())</span>
+<span class="nc" id="L55">        .authorizeHttpRequests(authorizeRequests -&gt; authorizeRequests</span>
+<span class="nc" id="L56">            .requestMatchers(&quot;/api/v*/registration/**&quot;, &quot;/api/v*/login&quot;)</span>
+<span class="nc" id="L57">            .permitAll().anyRequest().authenticated())</span>
+<span class="nc" id="L58">        .sessionManagement(sessionManagement -&gt; sessionManagement</span>
+<span class="nc" id="L59">            .sessionCreationPolicy(SessionCreationPolicy.STATELESS))</span>
+<span class="nc" id="L60">        .addFilterBefore(jwtRequestFilter,</span>
+            UsernamePasswordAuthenticationFilter.class);
+
+<span class="nc" id="L63">    return http.build();</span>
+  }
+
+  /**
+   * Configures the DAO authentication provider.
+   *
+   * @return A configured DaoAuthenticationProvider object.
+   */
+  @Bean
+  public DaoAuthenticationProvider daoAuthenticationProvider() {
+<span class="nc" id="L73">    DaoAuthenticationProvider provider = new DaoAuthenticationProvider();</span>
+<span class="nc" id="L74">    provider.setPasswordEncoder(bCryptPasswordEncoder);</span>
+<span class="nc" id="L75">    provider.setUserDetailsService(appUserService);</span>
+<span class="nc" id="L76">    return provider;</span>
+  }
+
+  /**
+   * Configures the authentication manager.
+   *
+   * @param authenticationConfiguration The authentication configuration.
+   * @return A configured AuthenticationManager object.
+   * @throws Exception Exception thrown in case of configuration error.
+   */
+  @Bean
+  public AuthenticationManager authenticationManager(
+      final AuthenticationConfiguration authenticationConfiguration)
+      throws Exception {
+<span class="nc" id="L90">    return authenticationConfiguration.getAuthenticationManager();</span>
+  }
+
+  /**
+   * Returns the user details service.
+   *
+   * @return The UserDetailsService implementation used for managing user
+   *         details.
+   */
+  @Bean
+  public UserDetailsService userDetailsService() {
+<span class="nc" id="L101">    return appUserService;</span>
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

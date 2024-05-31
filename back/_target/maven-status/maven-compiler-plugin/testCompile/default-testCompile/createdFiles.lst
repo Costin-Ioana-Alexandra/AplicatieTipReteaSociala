@@ -1,0 +1,8 @@
+com\example\back\email\EmailServiceTest.class
+com\example\back\registration\token\ConfirmationTokenTest.class
+com\example\back\appuser\AppUserTest.class
+com\example\back\security\AuthenticationControllerTest.class
+com\example\back\security\config\MailConfigTest.class
+com\example\back\security\config\DataSourceConfigTest.class
+com\example\back\registration\RegistrationServiceTest.class
+com\example\back\registration\EmailValidatorTest.class

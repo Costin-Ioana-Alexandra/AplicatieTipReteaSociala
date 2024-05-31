@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>RegistrationRequest.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">back</a> &gt; <a href="index.source.html" class="el_package">com.example.back.registration</a> &gt; <span class="el_source">RegistrationRequest.java</span></div><h1>RegistrationRequest.java</h1><pre class="source lang-java linenums">package com.example.back.registration;
+
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.ToString;
+
+/**
+ * Defines a data transfer object for user registration requests.
+ */
+@Getter
+<span class="fc" id="L12">@AllArgsConstructor</span>
+<span class="nc bnc" id="L13" title="All 38 branches missed.">@EqualsAndHashCode</span>
+<span class="nc" id="L14">@ToString</span>
+public class RegistrationRequest {
+
+  /**
+   * The first name of the user.
+   */
+<span class="fc" id="L20">  private final String firstName;</span>
+
+  /**
+   * The last name of the user.
+   */
+<span class="fc" id="L25">  private final String lastName;</span>
+
+  /**
+   * The email of the user.
+   */
+<span class="fc" id="L30">  private final String email;</span>
+
+  /**
+   * The password of the user.
+   */
+<span class="fc" id="L35">  private final String password;</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

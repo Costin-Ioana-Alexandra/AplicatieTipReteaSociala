@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AuthenticationController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">back</a> &gt; <a href="index.source.html" class="el_package">com.example.back.security</a> &gt; <span class="el_source">AuthenticationController.java</span></div><h1>AuthenticationController.java</h1><pre class="source lang-java linenums">package com.example.back.security;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.example.back.registration.RegistrationRequest;
+import com.example.back.registration.RegistrationService;
+
+import lombok.RequiredArgsConstructor;
+
+/**
+ * Represents the class controller for handling authentication-related
+ * endpoints.
+ */
+@RestController
+@RequestMapping(&quot;/api/v1&quot;)
+<span class="fc" id="L29">@RequiredArgsConstructor</span>
+public class AuthenticationController {
+
+  /**
+   * The authentication manager for handling user authentication.
+   */
+  private final AuthenticationManager authenticationManager;
+
+  /**
+   * The JWT utility for generating and validating JWT tokens.
+   */
+  private final JwtUtil jwtUtil;
+
+  /**
+   * The service for handling user registration.
+   */
+  private final RegistrationService registrationService;
+
+  /**
+   * Endpoint for user authentication.
+   *
+   * @param authenticationRequest Request body containing user credentials
+   * @return ResponseEntity containing JWT token if authentication is
+   *         successful, otherwise returns ResponseEntity with UNAUTHORIZED
+   *         status
+   */
+  @PostMapping(&quot;/login&quot;)
+  public ResponseEntity&lt;Map&lt;String, String&gt;&gt; createAuthenticationToken(
+      @RequestBody final AuthenticationRequest authenticationRequest) {
+<span class="fc" id="L58">    Map&lt;String, String&gt; response = new HashMap&lt;&gt;();</span>
+
+<span class="pc bpc" id="L60" title="1 of 2 branches missed.">    if (authenticationRequest.getEmail() == null</span>
+<span class="pc bpc" id="L61" title="1 of 2 branches missed.">        || authenticationRequest.getPassword() == null) {</span>
+<span class="nc" id="L62">      response.put(&quot;error&quot;, &quot;Email and password must be provided&quot;);</span>
+<span class="nc" id="L63">      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);</span>
+    }
+
+    try {
+<span class="fc" id="L67">      Authentication authentication = authenticationManager</span>
+<span class="fc" id="L68">          .authenticate(new UsernamePasswordAuthenticationToken(</span>
+<span class="fc" id="L69">              authenticationRequest.getEmail(),</span>
+<span class="fc" id="L70">              authenticationRequest.getPassword()));</span>
+
+<span class="fc" id="L72">      final UserDetails userDetails = (UserDetails) authentication</span>
+<span class="fc" id="L73">          .getPrincipal();</span>
+<span class="fc" id="L74">      final String jwt = jwtUtil.generateToken(userDetails.getUsername());</span>
+
+<span class="fc" id="L76">      response.put(&quot;token&quot;, jwt);</span>
+<span class="fc" id="L77">      return ResponseEntity.ok(response);</span>
+<span class="fc" id="L78">    } catch (BadCredentialsException e) {</span>
+<span class="fc" id="L79">      response.put(&quot;error&quot;, &quot;Invalid email/password combination&quot;);</span>
+<span class="fc" id="L80">      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);</span>
+<span class="nc" id="L81">    } catch (Exception e) {</span>
+<span class="nc" id="L82">      response.put(&quot;error&quot;, &quot;An error occurred during authentication&quot;);</span>
+<span class="nc" id="L83">      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)</span>
+<span class="nc" id="L84">          .body(response);</span>
+    }
+  }
+
+  /**
+   * Endpoint for user registration.
+   *
+   * @param registrationRequest Request body containing user registration
+   *                            details
+   * @return ResponseEntity containing the registration token
+   */
+  @PostMapping(&quot;/register&quot;)
+  public ResponseEntity&lt;Map&lt;String, String&gt;&gt; register(
+      @RequestBody final RegistrationRequest registrationRequest) {
+<span class="fc" id="L98">    Map&lt;String, String&gt; response = new HashMap&lt;&gt;();</span>
+
+<span class="pc bpc" id="L100" title="1 of 2 branches missed.">    if (registrationRequest.getEmail() == null</span>
+<span class="pc bpc" id="L101" title="1 of 2 branches missed.">        || registrationRequest.getPassword() == null) {</span>
+<span class="nc" id="L102">      response.put(&quot;error&quot;, &quot;Email and password must be provided&quot;);</span>
+<span class="nc" id="L103">      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);</span>
+    }
+
+    try {
+<span class="fc" id="L107">      String token = registrationService.register(registrationRequest);</span>
+<span class="fc" id="L108">      response.put(&quot;message&quot;, &quot;Registration success&quot;);</span>
+<span class="fc" id="L109">      response.put(&quot;token&quot;, token);</span>
+<span class="fc" id="L110">      return ResponseEntity.ok(response);</span>
+<span class="nc" id="L111">    } catch (Exception e) {</span>
+<span class="nc" id="L112">      response.put(&quot;error&quot;, &quot;An error occurred during registration&quot;);</span>
+<span class="nc" id="L113">      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)</span>
+<span class="nc" id="L114">          .body(response);</span>
+    }
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

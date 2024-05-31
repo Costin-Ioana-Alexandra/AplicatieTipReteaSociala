@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AppUserService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">back</a> &gt; <a href="index.source.html" class="el_package">com.example.back.appuser</a> &gt; <span class="el_source">AppUserService.java</span></div><h1>AppUserService.java</h1><pre class="source lang-java linenums">package com.example.back.appuser;
+
+import java.time.LocalDateTime;
+import java.util.Optional;
+import java.util.UUID;
+
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Service;
+
+import com.example.back.registration.token.ConfirmationToken;
+import com.example.back.registration.token.ConfirmationTokenService;
+
+import lombok.AllArgsConstructor;
+
+/**
+ * Represents a class service for managing users.
+ */
+@Service
+<span class="nc" id="L22">@AllArgsConstructor</span>
+public class AppUserService implements UserDetailsService {
+
+  /**
+   * Message for a not found user.
+   */
+  private static final String USER_NOT_FOUND = &quot;user with %s not found&quot;;
+
+  /**
+   * The validity duration of the confirmation token in minutes.
+   */
+  private static final int CONFIRMATION_TOKEN_VALIDITY_MINUTES = 15;
+
+  /**
+   * Repository for accessing user data.
+   */
+  private final AppUserRepository appUserRepository;
+
+  /**
+   * Encoder for encrypting user passwords.
+   */
+  private final BCryptPasswordEncoder bCryptPasswordEncoder;
+
+  /**
+   * Service for handling confirmation tokens.
+   */
+  private final ConfirmationTokenService confirmationTokenService;
+
+  /**
+   * Loads a user by their email.
+   *
+   * @param email the email of the user to load
+   * @return the user details
+   * @throws UsernameNotFoundException if the user is not found
+   */
+  @Override
+  public UserDetails loadUserByUsername(final String email)
+      throws UsernameNotFoundException {
+<span class="nc" id="L60">    return appUserRepository.findByEmail(email)</span>
+<span class="nc" id="L61">        .orElseThrow(() -&gt; new UsernameNotFoundException(</span>
+<span class="nc" id="L62">            String.format(USER_NOT_FOUND, email)));</span>
+  }
+
+  /**
+   * Finds a user by their email.
+   *
+   * @param email the email of the user
+   * @return an Optional containing the user if found, or empty if not found
+   */
+  public Optional&lt;AppUser&gt; findByEmail(final String email) {
+<span class="nc" id="L72">    return appUserRepository.findByEmail(email);</span>
+  }
+
+  /**
+   * Signs up a new user.
+   *
+   * @param appUser the user to sign up
+   * @return a confirmation token for email verification
+   * @throws IllegalStateException if the email is already taken
+   */
+  public String signUpUser(final AppUser appUser) {
+<span class="nc" id="L83">    String email = appUser.getEmail();</span>
+<span class="nc" id="L84">    boolean userExist = appUserRepository.findByEmail(email).isPresent();</span>
+
+<span class="nc bnc" id="L86" title="All 2 branches missed.">    if (userExist) {</span>
+<span class="nc" id="L87">      throw new IllegalStateException(&quot;This email is already taken!&quot;);</span>
+    }
+
+<span class="nc" id="L90">    String encodedPass = bCryptPasswordEncoder.encode(appUser.getPassword());</span>
+<span class="nc" id="L91">    appUser.setPassword(encodedPass);</span>
+
+<span class="nc" id="L93">    appUserRepository.save(appUser);</span>
+
+<span class="nc" id="L95">    String token = UUID.randomUUID().toString();</span>
+<span class="nc" id="L96">    ConfirmationToken confirmationToken = new ConfirmationToken(token,</span>
+<span class="nc" id="L97">        LocalDateTime.now(),</span>
+<span class="nc" id="L98">        LocalDateTime.now().plusMinutes(CONFIRMATION_TOKEN_VALIDITY_MINUTES),</span>
+        appUser);
+
+<span class="nc" id="L101">    confirmationTokenService.saveConfirmationToken(confirmationToken);</span>
+
+<span class="nc" id="L103">    return token;</span>
+  }
+
+  /**
+   * Enables a user's account.
+   *
+   * @param email the email of the user to enable
+   * @return the number of affected rows
+   */
+  public int enableAppUser(final String email) {
+<span class="nc" id="L113">    return appUserRepository.enableAppUser(email);</span>
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

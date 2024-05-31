@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>JwtRequestFilter.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">back</a> &gt; <a href="index.source.html" class="el_package">com.example.back.security</a> &gt; <span class="el_source">JwtRequestFilter.java</span></div><h1>JwtRequestFilter.java</h1><pre class="source lang-java linenums">package com.example.back.security;
+
+import java.io.IOException;
+
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
+import org.springframework.stereotype.Component;
+import org.springframework.web.filter.OncePerRequestFilter;
+
+import com.example.back.appuser.AppUserService;
+
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
+
+/**
+ * Represents a class filter for intercepting incoming requests and processing
+ * JWT tokens for authentication.
+ */
+@Component
+<span class="nc" id="L25">@RequiredArgsConstructor</span>
+public class JwtRequestFilter extends OncePerRequestFilter {
+
+  /**
+   * The service for interacting with application users.
+   */
+  private final AppUserService appUserService;
+
+  /**
+   * The utility class for JWT operations.
+   */
+  private final JwtUtil jwtUtil;
+
+  /**
+   * The length of the &quot;Bearer&quot; prefix in the Authorization header.
+   */
+  private static final int BEARER_PREFIX_LENGTH = 7;
+
+  /**
+   * Performs filtering logic for each incoming request.
+   *
+   * @param request     the incoming HTTP request.
+   * @param response    the outgoing HTTP response.
+   * @param filterChain the filter chain.
+   * @throws ServletException if an error occurs during servlet processing.
+   * @throws IOException      if an I/O error occurs.
+   */
+  @Override
+  protected void doFilterInternal(final HttpServletRequest request,
+      final HttpServletResponse response, final FilterChain filterChain)
+      throws ServletException, IOException {
+<span class="nc" id="L56">    final String authorizationHeader = request.getHeader(&quot;Authorization&quot;);</span>
+
+<span class="nc" id="L58">    String username = null;</span>
+<span class="nc" id="L59">    String jwt = null;</span>
+
+<span class="nc bnc" id="L61" title="All 2 branches missed.">    if (authorizationHeader != null</span>
+<span class="nc bnc" id="L62" title="All 2 branches missed.">        &amp;&amp; authorizationHeader.startsWith(&quot;Bearer &quot;)) {</span>
+<span class="nc" id="L63">      int startIndex = BEARER_PREFIX_LENGTH;</span>
+<span class="nc" id="L64">      jwt = authorizationHeader.substring(startIndex);</span>
+<span class="nc" id="L65">      username = jwtUtil.extractUsername(jwt);</span>
+    }
+
+<span class="nc bnc" id="L68" title="All 2 branches missed.">    if (username != null</span>
+<span class="nc bnc" id="L69" title="All 2 branches missed.">        &amp;&amp; SecurityContextHolder.getContext().getAuthentication() == null) {</span>
+<span class="nc" id="L70">      UserDetails userDetails = this.appUserService</span>
+<span class="nc" id="L71">          .loadUserByUsername(username);</span>
+<span class="nc bnc" id="L72" title="All 2 branches missed.">      if (jwtUtil.validateToken(jwt, userDetails.getUsername())) {</span>
+        UsernamePasswordAuthenticationToken
+<span class="nc" id="L74">        usernamePasswordAuthenticationToken =</span>
+            new UsernamePasswordAuthenticationToken(
+<span class="nc" id="L76">            userDetails, null, userDetails.getAuthorities());</span>
+<span class="nc" id="L77">        usernamePasswordAuthenticationToken.setDetails(</span>
+<span class="nc" id="L78">            new WebAuthenticationDetailsSource().buildDetails(request));</span>
+<span class="nc" id="L79">        SecurityContextHolder.getContext()</span>
+<span class="nc" id="L80">            .setAuthentication(usernamePasswordAuthenticationToken);</span>
+      }
+    }
+<span class="nc" id="L83">    filterChain.doFilter(request, response);</span>
+<span class="nc" id="L84">  }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

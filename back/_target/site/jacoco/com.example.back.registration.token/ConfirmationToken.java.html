@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ConfirmationToken.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">back</a> &gt; <a href="index.source.html" class="el_package">com.example.back.registration.token</a> &gt; <span class="el_source">ConfirmationToken.java</span></div><h1>ConfirmationToken.java</h1><pre class="source lang-java linenums">package com.example.back.registration.token;
+
+import java.time.LocalDateTime;
+
+import com.example.back.appuser.AppUser;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.SequenceGenerator;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+/**
+ * Represents a confirmation token used for account verification.
+ */
+@Getter
+<span class="pc" id="L23">@Setter</span>
+<span class="nc" id="L24">@NoArgsConstructor</span>
+@Entity
+public class ConfirmationToken {
+
+  /**
+   * Generates sequence numbers for the confirmation tokens.
+   */
+  @SequenceGenerator(
+      name = &quot;confirmation_token_sequence&quot;,
+      sequenceName = &quot;confirmation_token_sequence&quot;,
+      allocationSize = 1
+  )
+  @Id
+  @GeneratedValue(
+      strategy = GenerationType.SEQUENCE,
+      generator = &quot;confirmation_token_sequence&quot;
+  )
+<span class="nc" id="L41">  private Long id;</span>
+
+  /**
+   * The token string.
+   */
+  @Column(nullable = false)
+<span class="fc" id="L47">  private String token;</span>
+
+  /**
+   * The date and time when the token was created.
+   */
+  @Column(nullable = false)
+<span class="fc" id="L53">  private LocalDateTime createdAt;</span>
+
+  /**
+   * The date and time when the token expires.
+   */
+  @Column(nullable = false)
+<span class="fc" id="L59">  private LocalDateTime expiresAt;</span>
+
+  /**
+   * The date and time when the token was confirmed.
+   */
+<span class="fc" id="L64">  private LocalDateTime confirmedAt;</span>
+
+  /**
+   * The user associated with the token.
+   */
+  @ManyToOne
+  @JoinColumn(nullable = false, name = &quot;app_user_id&quot;)
+<span class="fc" id="L71">  private AppUser appUser;</span>
+
+  /**
+   * Constructs a confirmation token with the specified parameters.
+   *
+   * @param token     The token string.
+   * @param createdAt The date and time when the token was created.
+   * @param expiresAt The date and time when the token expires.
+   * @param appUser   The user associated with the token.
+   */
+  public ConfirmationToken(final String token, final LocalDateTime createdAt,
+<span class="fc" id="L82">      final LocalDateTime expiresAt, final AppUser appUser) {</span>
+<span class="fc" id="L83">    this.token = token;</span>
+<span class="fc" id="L84">    this.createdAt = createdAt;</span>
+<span class="fc" id="L85">    this.expiresAt = expiresAt;</span>
+<span class="fc" id="L86">    this.appUser = appUser;</span>
+<span class="fc" id="L87">  }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
